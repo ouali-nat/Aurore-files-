@@ -36,7 +36,7 @@ body:has(.home.active){background:#f7f9fc}
 .home-collections{display:grid;grid-template-columns:1fr 1fr;gap:10px}.collection-tile{display:flex;align-items:center;gap:10px;padding:15px 12px;border:1px solid #e5e8ef;border-radius:16px;background:#fff;color:#343941;text-align:left;font-size:13px}.collection-tile span:first-child{font-size:19px;color:#5f6b7a}
 .home-bottom{position:fixed;z-index:10;left:0;right:0;bottom:0;padding:8px 18px calc(8px + env(safe-area-inset-bottom));background:rgba(247,249,252,.96);backdrop-filter:blur(18px);border-top:1px solid #e6eaf0;display:flex;justify-content:center}
 .home-bottom-inner{width:100%;max-width:520px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tab{border:0;border-radius:18px;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#606875;font-size:11px;background:transparent}
-.home-tab .tab-icon{font-size:20px;line-height:1.1}.home-tab.active{background:#dce8fb;color:#174ea6;font-weight:650}.home-note{font-size:12px;color:#69717e;line-height:1.6;margin:0}
+.home-tab .tab-icon{font-size:20px;line-height:1.1}.home-tab.active{background:#dce8fb;color:#174ea6;font-weight:650}.home-note{font-size:12px;color:#69717e;line-height:1.6;margin:0}.home-toast{position:fixed;z-index:20;left:50%;bottom:86px;transform:translateX(-50%);max-width:calc(100vw - 32px);padding:11px 16px;border-radius:14px;background:#263238;color:#fff;font-size:13px;box-shadow:0 6px 24px #0002;opacity:0;pointer-events:none;transition:opacity .2s}.home-toast.show{opacity:1}
 @media(max-width:360px){.home{padding-left:13px;padding-right:13px}.category-grid{gap:8px}.category-tile{padding:9px;gap:8px}.category-icon{width:34px;height:34px}.recent-card{flex-basis:132px}}
 header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 12px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px}
@@ -99,7 +99,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 <body>
 <section class="home active" id="home">
  <header class="home-top"><div class="home-brand"><div class="home-logo">✦</div>Aurore Files</div><button class="home-icon" id="homeSearchBtn" aria-label="Rechercher">⌕</button></header>
- <label class="home-search"><span aria-hidden="true">⌕</span><input id="homeSearch" type="search" placeholder="Rechercher dans les fichiers" autocomplete="off"></label>
+ <label class="home-search"><span aria-hidden="true">⌕</span><input id="homeSearch" type="search" placeholder="Rechercher dans les fichiers" autocomplete="off"></label><div class="home-toast" id="homeToast" role="status" aria-live="polite"></div>
  <section class="home-section"><div class="home-section-head"><h2>RÉCENTS</h2><button class="home-see" id="recentAll">Tout afficher</button></div><div class="home-recent" id="homeRecent"><div class="recent-empty"><span class="empty-icon">▤</span><span>Aucun fichier ouvert récemment.<br>Choisis un fichier pour commencer.</span></div></div></section>
  <section class="home-section"><div class="home-section-head"><h2>CATÉGORIES</h2></div><div class="category-grid">
  <button class="category-tile" data-kind="all"><span class="category-icon">⇩</span><span class="category-copy"><b>Téléchargements</b><span>Ouvrir des médias</span></span></button>
@@ -181,7 +181,7 @@ function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('show');clea
 function fill(r){r.style.setProperty('--p',((r.value-r.min)/(r.max-r.min)*100)+'%')}
 function showPlayer(){document.getElementById('home').classList.remove('active');document.getElementById('home').style.display='none';document.getElementById('app').style.display='block';window.scrollTo(0,0)}
 function showHome(){document.getElementById('app').style.display='none';document.getElementById('home').style.display='block';document.getElementById('home').classList.add('active');window.scrollTo(0,0)}
-function homeToast(message){var e=document.getElementById('toast');e.textContent=message;e.classList.add('show');clearTimeout(homeToast.t);homeToast.t=setTimeout(function(){e.classList.remove('show')},1800)}
+function homeToast(message){var e=document.getElementById('homeToast');e.textContent=message;e.classList.add('show');clearTimeout(homeToast.t);homeToast.t=setTimeout(function(){e.classList.remove('show')},2200)}
 
 /* ---------- ajout de fichiers ---------- */
 function addFiles(files){
@@ -194,7 +194,7 @@ function addFiles(files){
 }
 $('#bAdd').onclick=function(){$('#fFiles').click()};
 $('#bDir').onclick=function(){$('#fDir').click()};
-$('#fFiles').onchange=function(e){addFiles(e.target.files);e.target.value=''};
+$('#fFiles').onchange=function(e){addFiles(e.target.files);e.target.value='';e.target.accept='audio/*,video/*'};
 $('#fDir').onchange=function(e){addFiles(e.target.files);e.target.value=''};
 
 /* ---------- liste ---------- */
