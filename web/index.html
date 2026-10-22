@@ -72,6 +72,8 @@ body:has(.home.active){background:#f7f9fc}
 .viewer-stage img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:12px;box-shadow:0 18px 65px rgba(0,0,0,.35);user-select:none;-webkit-user-drag:none}
 .viewer-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:54px;border-radius:15px;background:rgba(20,22,30,.52);border:1px solid rgba(255,255,255,.14);color:white;font-size:25px;backdrop-filter:blur(12px)}
 .viewer-prev{left:3px}.viewer-next{right:3px}
+
+.viewer-tools{position:relative}.viewer-more{font-size:25px}.image-menu{position:absolute;right:0;top:48px;z-index:5;width:min(270px,82vw);max-height:70vh;overflow:auto;padding:7px;border-radius:18px;background:rgba(32,35,44,.98);border:1px solid #555;box-shadow:0 16px 48px #0008;display:none}.image-menu.open{display:block}.image-menu button{display:flex;gap:12px;width:100%;padding:12px 10px;border:0;border-radius:11px;background:transparent;color:#fff;text-align:left;font-size:13px}.image-menu button:active{background:#ffffff1c}.image-menu button span{width:22px;color:#d5e2ff}.image-menu .menu-sep{height:1px;margin:5px;background:#ffffff24}.image-menu .menu-note{padding:8px;color:#b7bdc8;font-size:10px;line-height:1.4}.image-filters{display:flex;gap:7px;padding:0 8px 8px;overflow:auto}.image-filter{flex:none;border-radius:999px;padding:8px 12px;background:#e8edf5;color:#596577;font-size:11px;font-weight:700}.image-filter.active{background:#202c40;color:#fff}.image-tile.is-favorite:before{content:'★';position:absolute;z-index:2;top:6px;right:7px;color:white;text-shadow:0 1px 7px #000}.image-info{position:fixed;inset:0;z-index:55;display:none;align-items:center;justify-content:center;padding:20px;background:#05070cb3}.image-info.open{display:flex}.image-info-card{width:min(420px,100%);padding:20px;border-radius:22px;background:#f8faff;color:#222a36}.image-info-card h3{margin:0 0 14px}.image-info-card dl{display:grid;grid-template-columns:100px 1fr;gap:9px 12px;font-size:12px}.image-info-card dt{color:#707987}.image-info-card dd{margin:0;overflow-wrap:anywhere;font-weight:600}.image-info-card button{margin-top:18px;width:100%;padding:12px;border-radius:12px;background:#202c40;color:white}@media print{body *{visibility:hidden!important}#printImage,#printImage *{visibility:visible!important}#printImage{display:block!important;position:fixed;inset:0;width:100%;height:100%;object-fit:contain}}
 @media(min-width:560px){.image-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:8px}.image-tile{border-radius:12px}}
 @media(max-width:360px){.home{padding-left:13px;padding-right:13px}.category-grid{gap:8px}.category-tile{padding:9px;gap:8px}.category-icon{width:34px;height:34px}.recent-card{flex-basis:132px}}
 header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 12px}
@@ -159,15 +161,16 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
  <nav class="home-bottom"><div class="home-bottom-inner"><button class="home-tab active" data-tab="home"><span class="tab-icon">⌂</span>Accueil</button><button class="home-tab" data-tab="audio"><span class="tab-icon">♫</span>Audio</button><button class="home-tab" data-tab="video"><span class="tab-icon">▷</span>Vidéos</button></div></nav>
 </section>
 <section class="image-library" id="imageLibrary" aria-label="Bibliothèque d’images">
- <header class="image-top"><button class="image-back" id="imageBack" aria-label="Retour">‹</button><div class="image-heading"><h2>Mes images</h2><p id="imageCount">0 image</p></div><button class="image-add" id="imageChoose">＋ Ouvrir</button></header>
+ <header class="image-top"><button class="image-back" id="imageBack" aria-label="Retour">‹</button><div class="image-heading"><h2>Mes images</h2><p id="imageCount">0 image</p></div><button class="image-add" id="imageChoose">＋ Ouvrir</button></header><nav class="image-filters"><button class="image-filter active" data-image-filter="all">Toutes</button><button class="image-filter" data-image-filter="favorites">★ Favoris</button><button class="image-filter" data-image-filter="private">🔒 Privées</button></nav>
  <div class="image-grid" id="imageGrid"></div>
  <div class="image-empty" id="imageEmpty"><div class="image-empty-icon">▧</div><b>Aucune image ouverte</b><p>Ouvre plusieurs images de ton appareil. Elles apparaîtront ici dans une galerie compacte, facile à parcourir.</p></div>
 </section>
 <section class="image-viewer" id="imageViewer" aria-label="Visionneuse d’images">
- <div class="viewer-top"><button class="viewer-btn" id="viewerClose" aria-label="Fermer">×</button><div class="viewer-caption"><b id="viewerName">Image</b><span id="viewerCount">1 / 1</span></div><button class="viewer-btn" id="viewerOpenAnother" aria-label="Ouvrir des images">＋</button></div>
+ <div class="viewer-top"><button class="viewer-btn" id="viewerClose" aria-label="Fermer">×</button><div class="viewer-caption"><b id="viewerName">Image</b><span id="viewerCount">1 / 1</span></div><div class="viewer-tools"><button class="viewer-btn viewer-more" id="viewerMore" aria-label="Plus d’options">⋮</button><div class="image-menu" id="imageMenu"><button data-image-action="share"><span>↗</span>Partager</button><button data-image-action="rotate"><span>↻</span>Retourner / pivoter</button><button data-image-action="favorite"><span>★</span>Ajouter aux favoris</button><div class="menu-sep"></div><button data-image-action="copy"><span>▣</span>Copier dans un dossier…</button><button data-image-action="move"><span>⇢</span>Déplacer vers un dossier…</button><button data-image-action="use"><span>▧</span>Utiliser comme…</button><button data-image-action="trash"><span>⌫</span>Placer dans la corbeille / retirer</button><button data-image-action="private"><span>🔒</span>Mettre en privé</button><div class="menu-sep"></div><button data-image-action="info"><span>ⓘ</span>Informations</button><button data-image-action="print"><span>⎙</span>Imprimer</button><div class="menu-note">Les actions sur les fichiers originaux dépendent des autorisations Android et du navigateur.</div></div></div></div>
  <div class="viewer-stage" id="viewerStage"><button class="viewer-nav viewer-prev" id="viewerPrev" aria-label="Image précédente">‹</button><img id="viewerImage" alt=""><button class="viewer-nav viewer-next" id="viewerNext" aria-label="Image suivante">›</button></div>
  <div class="viewer-bottom"><span style="font-size:11px;color:#a9adba">Glisse ou utilise les flèches pour naviguer</span><button class="viewer-btn" id="viewerLast" aria-label="Image suivante">→</button></div>
 </section>
+<div class="image-info" id="imageInfo"><div class="image-info-card"><h3>Informations de l’image</h3><dl id="imageInfoDetails"></dl><button id="imageInfoClose">Fermer</button></div></div><img id="printImage" alt="" style="display:none">
 <div class="app player-view" id="app">
 <header>
  <div class="brand"><div class="logo">♫</div>Aurore Files</div>
@@ -228,7 +231,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 var $=function(s){return document.querySelector(s)};
 var m=$('#m'),stage=$('#stage'),app=$('#app');
 var pl=[],idx=-1,shuffle=false,rep=0,ab={a:null,b:null},sleepT=null,sleepFadeT=null,subUrl=null;
-var imageItems=[],imageIndex=0,imageLibrary=document.getElementById('imageLibrary'),imageViewer=document.getElementById('imageViewer');
+var imageItems=[],imageIndex=0,imageRotation=0,imageFilter='all',imageLibrary=document.getElementById('imageLibrary'),imageViewer=document.getElementById('imageViewer');
 var actx,an,filters=[],viz=$('#viz'),vc=viz.getContext('2d');
 var EXT=/\.(mp3|m4a|aac|wav|ogg|oga|opus|flac|mp4|m4v|webm|mkv|mov|avi|3gp)$/i;
 function fmt(t){if(!isFinite(t))return '0:00';t=Math.floor(t);var h=Math.floor(t/3600),mn=Math.floor(t%3600/60),s=t%60;return (h?h+':'+String(mn).padStart(2,'0'):mn)+':'+String(s).padStart(2,'0')}
@@ -248,7 +251,7 @@ function addFiles(files){
  var first=pl.length;
  arr.forEach(function(f){pl.push({f:f,url:URL.createObjectURL(f),name:f.name.replace(/\.[^.]+$/,''),v:/^video\//.test(f.type)||/\.(mp4|m4v|webm|mkv|mov|avi|3gp)$/i.test(f.name)})});
  render();toast(arr.length+' fichier(s) ajouté(s)');showPlayer();
- if(idx<0)load(first,true);updateHomeRecent(arr);
+ if(idx<0)load(first,false);updateHomeRecent(arr);
 }
 $('#bAdd').onclick=function(){$('#fFiles').click()};
 $('#bDir').onclick=function(){$('#fDir').click()};
@@ -288,16 +291,18 @@ document.getElementById('requestFilesAccess').onclick=async function(){
   if(typeof window.showDirectoryPicker==='function'){
    homeToast('Choisis un dossier à parcourir…');
    var root=await window.showDirectoryPicker({mode:'read'});
-   var found=[];
+   var found=[],pictures=[],docs=0;
    async function scanDirectory(dir){
     for await(var entry of dir.values()){
-     if(entry.kind==='directory'){await scanDirectory(entry)}
-     else if(EXT.test(entry.name)){try{found.push(await entry.getFile())}catch(ignore){}}
+     if(entry.kind==='directory'){try{await scanDirectory(entry)}catch(ignore){}}
+     else{try{var file=await entry.getFile();if(/^image\//i.test(file.type)||/\.(avif|bmp|gif|heic|heif|jpe?g|png|svg|tif?f|webp)$/i.test(file.name))pictures.push(file);else if(/^(audio|video)\//i.test(file.type)||EXT.test(file.name))found.push(file);else if(/\.(pdf|docx?|xlsx?|pptx?|txt|epub)$/i.test(file.name))docs++}catch(ignore){}}
     }
    }
    await scanDirectory(root);
-   if(found.length){addFiles(found);homeToast(found.length+' média(s) trouvé(s) dans « '+root.name+' »')}
-   else{homeToast('Aucun média compatible trouvé dans ce dossier.')}
+   if(found.length)addFiles(found);
+   if(pictures.length)addImages(pictures);
+   if(!found.length&&!pictures.length)homeToast(docs?docs+' document(s) repéré(s) : lecteur de documents à venir.':'Aucun média compatible trouvé.');
+   else homeToast('Classement terminé : '+pictures.length+' image(s), '+found.length+' audio/vidéo. Aucun lancement automatique.');
   }else{
    homeToast('Choisis un dossier dans le sélecteur Android.');
    document.getElementById('fDir').click();
@@ -315,37 +320,47 @@ document.getElementById('recentAll').onclick=function(){document.getElementById(
 function addImages(files){
  var incoming=Array.prototype.filter.call(files,function(f){return /^image\//i.test(f.type)||/\.(avif|bmp|gif|heic|heif|jpe?g|png|svg|tif?f|webp)$/i.test(f.name)});
  if(!incoming.length){homeToast('Aucune image compatible trouvée.');return}
- incoming.forEach(function(f){
-  var id=key(f);
-  if(imageItems.some(function(it){return it.id===id}))return;
-  imageItems.push({id:id,file:f,name:f.name,url:URL.createObjectURL(f)});
- });
+ incoming.forEach(function(f){var id=key(f);if(!imageItems.some(function(it){return it.id===id}))imageItems.push({id:id,file:f,name:f.name,url:URL.createObjectURL(f),favorite:false,private:false,rotation:0})});
  renderImages();openImageLibrary();
 }
+function visibleImageItems(){return imageItems.map(function(it,i){return {it:it,i:i}}).filter(function(x){return imageFilter==='favorites'?x.it.favorite:imageFilter==='private'?x.it.private:!x.it.private})}
 function renderImages(){
- var grid=document.getElementById('imageGrid');grid.innerHTML='';
- imageItems.forEach(function(it,i){
-  var b=document.createElement('button');b.type='button';b.className='image-tile';b.setAttribute('aria-label','Ouvrir '+it.name);
-  var im=document.createElement('img');im.src=it.url;im.alt=it.name;im.loading=i>11?'lazy':'eager';
-  var label=document.createElement('span');label.textContent=it.name;
-  b.appendChild(im);b.appendChild(label);b.onclick=function(){openImageViewer(i)};grid.appendChild(b);
- });
- document.getElementById('imageCount').textContent=imageItems.length+' image'+(imageItems.length===1?'':'s');
- document.getElementById('imageEmpty').style.display=imageItems.length?'none':'block';
+ var grid=document.getElementById('imageGrid');grid.innerHTML='';var visible=visibleImageItems();
+ visible.forEach(function(x,j){var it=x.it,i=x.i;var b=document.createElement('button');b.type='button';b.className='image-tile'+(it.favorite?' is-favorite':'');var im=document.createElement('img');im.src=it.url;im.alt=it.name;im.loading=j>11?'lazy':'eager';im.style.transform='rotate('+it.rotation+'deg)';var label=document.createElement('span');label.textContent=it.name;b.appendChild(im);b.appendChild(label);b.onclick=function(){openImageViewer(i)};grid.appendChild(b)});
+ document.getElementById('imageCount').textContent=visible.length+' image'+(visible.length===1?'':'s');
+ document.getElementById('imageEmpty').style.display=visible.length?'none':'block';
 }
 function openImageLibrary(){imageLibrary.classList.add('open');imageLibrary.scrollTop=0;document.getElementById('home').classList.remove('active');document.getElementById('home').style.display='none';document.getElementById('app').style.display='none';imageViewer.classList.remove('open');window.scrollTo(0,0)}
 function closeImageLibrary(){imageLibrary.classList.remove('open');showHome()}
-function openImageViewer(i){if(!imageItems.length)return;imageIndex=(i+imageItems.length)%imageItems.length;updateImageViewer();imageViewer.classList.add('open')}
-function updateImageViewer(){var it=imageItems[imageIndex];if(!it)return;var im=document.getElementById('viewerImage');im.src=it.url;im.alt=it.name;document.getElementById('viewerName').textContent=it.name;document.getElementById('viewerCount').textContent=(imageIndex+1)+' / '+imageItems.length;document.getElementById('viewerPrev').style.visibility=imageItems.length>1?'visible':'hidden';document.getElementById('viewerNext').style.visibility=imageItems.length>1?'visible':'hidden';}
-function moveImage(step){if(!imageItems.length)return;imageIndex=(imageIndex+step+imageItems.length)%imageItems.length;updateImageViewer()}
+function openImageViewer(i){if(!imageItems.length)return;imageIndex=(i+imageItems.length)%imageItems.length;imageRotation=imageItems[imageIndex].rotation||0;updateImageViewer();imageViewer.classList.add('open')}
+function updateImageViewer(){var it=imageItems[imageIndex];if(!it)return;var im=document.getElementById('viewerImage');im.src=it.url;im.alt=it.name;im.style.transform='rotate('+imageRotation+'deg)';document.getElementById('viewerName').textContent=it.name;document.getElementById('viewerCount').textContent=(imageIndex+1)+' / '+imageItems.length;document.getElementById('viewerPrev').style.visibility=imageItems.length>1?'visible':'hidden';document.getElementById('viewerNext').style.visibility=imageItems.length>1?'visible':'hidden';document.querySelector('[data-image-action="favorite"]').innerHTML='<span>★</span>'+(it.favorite?'Retirer des favoris':'Ajouter aux favoris');document.querySelector('[data-image-action="private"]').innerHTML='<span>🔒</span>'+(it.private?'Retirer de l’espace privé':'Mettre en privé');document.getElementById('imageMenu').classList.remove('open')}
+function moveImage(step){if(!imageItems.length)return;imageIndex=(imageIndex+step+imageItems.length)%imageItems.length;imageRotation=imageItems[imageIndex].rotation||0;updateImageViewer()}
+function currentImage(){return imageItems[imageIndex]}
+function downloadImage(it){var a=document.createElement('a');a.href=it.url;a.download=it.name;document.body.appendChild(a);a.click();a.remove()}
+async function copyOrMoveImage(){var it=currentImage();if(!it)return;if(typeof window.showDirectoryPicker!=='function'){homeToast('Copie directe non disponible ici. Télécharge l’image puis utilise le gestionnaire de fichiers.');return}try{var dir=await window.showDirectoryPicker({mode:'readwrite'});var target=await dir.getFileHandle(it.name,{create:true});var writer=await target.createWritable();await writer.write(it.file);await writer.close();homeToast('Copie enregistrée dans le dossier choisi. Le fichier source est conservé.')}catch(e){if(!e||e.name!=='AbortError')homeToast('Accès en écriture refusé ou copie impossible.')}}
+async function shareImage(){var it=currentImage();if(!it)return;try{if(navigator.share&&navigator.canShare&&navigator.canShare({files:[it.file]})){await navigator.share({files:[it.file],title:it.name});return}downloadImage(it);homeToast('Image téléchargée pour être partagée.')}catch(e){if(!e||e.name!=='AbortError')homeToast('Partage indisponible.')}}
+function showImageInfo(){var it=currentImage();if(!it)return;var dl=document.getElementById('imageInfoDetails');dl.innerHTML='';[['Nom',it.name],['Type',it.file.type||'Inconnu'],['Taille',size(it.file.size)],['Dimensions','Chargement…'],['Modifiée',it.file.lastModified?new Date(it.file.lastModified).toLocaleString():'Inconnue'],['État',it.private?'Privée dans cette session':it.favorite?'Favori':'Importée']].forEach(function(row){var dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=row[0];dd.textContent=row[1];dl.appendChild(dt);dl.appendChild(dd)});var probe=new Image();probe.onload=function(){if(dl.children[7])dl.children[7].textContent=probe.naturalWidth+' × '+probe.naturalHeight+' px'};probe.src=it.url;document.getElementById('imageInfo').classList.add('open')}
+async function handleImageAction(action){var it=currentImage();if(!it)return;
+ if(action==='share'){await shareImage();return}
+ if(action==='rotate'){it.rotation=((it.rotation||0)+90)%360;imageRotation=it.rotation;updateImageViewer();renderImages();return}
+ if(action==='favorite'){it.favorite=!it.favorite;updateImageViewer();renderImages();homeToast(it.favorite?'Ajoutée aux favoris':'Retirée des favoris');return}
+ if(action==='copy'||action==='move'){if(action==='move')homeToast('Le navigateur ne peut pas supprimer l’original en toute sécurité : une copie va être créée.');await copyOrMoveImage();return}
+ if(action==='use'){downloadImage(it);homeToast('Image téléchargée. Tu peux ensuite la choisir dans Android comme fond d’écran ou photo de profil.');return}
+ if(action==='trash'){if(confirm('Retirer cette image de la galerie Aurore Files ? Le fichier original du téléphone ne sera pas supprimé.')){imageItems.splice(imageIndex,1);if(!imageItems.length){imageViewer.classList.remove('open');renderImages();return}imageIndex=Math.min(imageIndex,imageItems.length-1);updateImageViewer();renderImages();homeToast('Image retirée de la galerie.')}return}
+ if(action==='private'){it.private=!it.private;updateImageViewer();renderImages();homeToast(it.private?'Masquée de la galerie publique pour cette session. Ce n’est pas un coffre-fort sécurisé.':'Image réaffichée.');return}
+ if(action==='info'){showImageInfo();return}
+ if(action==='print'){var pi=document.getElementById('printImage');pi.src=it.url;pi.style.display='block';var clean=function(){pi.style.display='none';window.removeEventListener('afterprint',clean)};window.addEventListener('afterprint',clean);setTimeout(function(){window.print()},100);return}
+}
 document.getElementById('imageBack').onclick=closeImageLibrary;
 document.getElementById('imageChoose').onclick=function(){document.getElementById('fImages').click()};
 document.getElementById('fImages').onchange=function(e){addImages(e.target.files);e.target.value=''};
-document.getElementById('viewerClose').onclick=function(){imageViewer.classList.remove('open')};
-document.getElementById('viewerOpenAnother').onclick=function(){document.getElementById('fImages').click()};
-document.getElementById('viewerPrev').onclick=function(){moveImage(-1)};
-document.getElementById('viewerNext').onclick=function(){moveImage(1)};
-document.getElementById('viewerLast').onclick=function(){moveImage(1)};
+document.getElementById('viewerClose').onclick=function(){imageViewer.classList.remove('open');document.getElementById('imageMenu').classList.remove('open')};
+document.getElementById('viewerMore').onclick=function(){document.getElementById('imageMenu').classList.toggle('open')};
+document.getElementById('imageMenu').addEventListener('click',function(e){var b=e.target.closest('[data-image-action]');if(b){e.stopPropagation();handleImageAction(b.getAttribute('data-image-action'))}});
+document.getElementById('viewerPrev').onclick=function(){moveImage(-1)};document.getElementById('viewerNext').onclick=function(){moveImage(1)};document.getElementById('viewerLast').onclick=function(){moveImage(1)};
+document.querySelectorAll('[data-image-filter]').forEach(function(b){b.onclick=function(){imageFilter=b.getAttribute('data-image-filter');document.querySelectorAll('[data-image-filter]').forEach(function(x){x.classList.toggle('active',x===b)});renderImages()}});
+document.getElementById('imageInfoClose').onclick=function(){document.getElementById('imageInfo').classList.remove('open')};document.getElementById('imageInfo').onclick=function(e){if(e.target===this)this.classList.remove('open')};
+document.addEventListener('click',function(e){if(!e.target.closest('.viewer-tools'))document.getElementById('imageMenu').classList.remove('open')});
 var imageTouchX=null;
 document.getElementById('viewerStage').addEventListener('touchstart',function(e){if(e.touches&&e.touches.length===1)imageTouchX=e.touches[0].clientX},{passive:true});
 document.getElementById('viewerStage').addEventListener('touchend',function(e){if(imageTouchX===null||!e.changedTouches.length)return;var dx=e.changedTouches[0].clientX-imageTouchX;if(Math.abs(dx)>45)moveImage(dx<0?1:-1);imageTouchX=null},{passive:true});
