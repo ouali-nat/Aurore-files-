@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0a14">
+<title>Aurore Files — lecteur audio et vidéo</title>
+<style>
+:root{--a:hsl(262 85% 66%);--bg:#0b0a14;--g:rgba(255,255,255,.07);--b:rgba(255,255,255,.13);--t:#f5f3ff;--m:#a9a4c4}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--t);background:radial-gradient(800px 460px at 10% -8%,color-mix(in srgb,var(--a) 42%,transparent),transparent 70%),radial-gradient(640px 420px at 100% 6%,color-mix(in srgb,var(--a) 22%,#2563eb 18%),transparent 70%),var(--bg);background-attachment:fixed;padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px)}
+.app{max-width:760px;margin:0 auto;padding:14px 14px 0}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.brand{font-weight:800;letter-spacing:-.03em;font-size:1.05rem;display:flex;align-items:center;gap:9px}
+.brand i{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,var(--a),#22d3ee);display:grid;place-items:center;font-style:normal;color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button{font:inherit;color:inherit;border:1px solid var(--b);background:var(--g);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:999px;min-height:42px;padding:0 15px;cursor:pointer;transition:transform .12s,background .2s,border-color .2s}
+button:active{transform:scale(.94)}
+button.on{background:color-mix(in srgb,var(--a) 38%,transparent);border-color:var(--a)}
+button.pri{background:var(--a);border-color:transparent;color:#fff;font-weight:700}
+.stage{position:relative;aspect-ratio:16/10;border-radius:28px;overflow:hidden;background:rgba(0,0,0,.4);border:1px solid var(--b);box-shadow:0 24px 60px -24px color-mix(in srgb,var(--a) 70%,transparent);touch-action:none}
+video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none}
+.stage.vid video{display:block}
+.art{position:absolute;inset:0;display:grid;place-items:center;font-size:5.5rem;color:rgba(255,255,255,.9);background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--a) 55%,transparent),transparent 62%)}
+.stage.vid .art,.stage.vid canvas{display:none}
+canvas{position:absolute;left:0;right:0;bottom:0;width:100%;height:55%}
+#bright{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+#toast{position:absolute;left:50%;top:14px;transform:translateX(-50%);padding:7px 14px;border-radius:999px;background:rgba(0,0,0,.6);font-size:.8rem;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+#toast.s{opacity:1}
+.info{margin:16px 4px 6px}
+h1{font-size:1.25rem;letter-spacing:-.03em;overflow-wrap:anywhere}
+.info p{color:var(--m);font-size:.82rem;margin-top:3px}
+.seek{display:flex;align-items:center;gap:10px;margin:10px 4px;font-size:.74rem;color:var(--m);font-variant-numeric:tabular-nums}
+input[type=range]{flex:1;accent-color:var(--a);height:28px}
+.ctrl{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0 12px}
+.ctrl button{width:48px;height:48px;padding:0;font-size:1.05rem}
+.ctrl .play{width:68px;height:68px;font-size:1.5rem}
+.tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.tools button{min-height:38px;font-size:.78rem;padding:0 13px}
+.tools .vol{display:flex;align-items:center;gap:6px;min-width:150px;flex:1;max-width:220px}
+.panel{border:1px solid var(--b);background:var(--g);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:24px;padding:14px 16px;margin-bottom:12px}
+.panel label{display:flex;align-items:center;gap:10px;font-size:.78rem;color:var(--m)}
+.panel label span{width:52px}
+.find{width:100%;min-height:44px;border-radius:999px;border:1px solid var(--b);background:rgba(0,0,0,.25);color:var(--t);padding:0 16px;font:inherit;margin-bottom:10px}
+ul{list-style:none;display:grid;gap:8px}
+li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:20px;border:1px solid var(--b);background:var(--g);cursor:pointer}
+li.cur{border-color:var(--a);background:color-mix(in srgb,var(--a) 22%,transparent)}
+li .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--a) 30%,transparent);flex:none}
+li .tx{flex:1;min-width:0}
+li b{display:block;font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+li small{color:var(--m);font-size:.7rem}
+li .x{min-height:32px;width:32px;padding:0;color:var(--m)}
+.empty{text-align:center;color:var(--m);padding:30px 14px;border:1px dashed var(--b);border-radius:24px;font-size:.84rem;line-height:1.7}
+.drop::after{content:"Dépose tes fichiers ici";position:fixed;inset:12px;border:2px dashed var(--a);border-radius:30px;background:rgba(11,10,20,.85);display:grid;place-items:center;font-size:1.2rem;z-index:9}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="brand"><i>♫</i>Aurore Files</div>
+<div class="row"><button class="pri" id="add">＋ Fichiers</button><button id="dir">Dossier</button></div>
+</header>
+
+<section class="stage" id="stage">
+<video id="m" playsinline></video>
+<div class="art" id="art">♫</div>
+<canvas id="viz"></canvas>
+<div id="bright"></div>
+<div id="toast"></div>
+</section>
+
+<div class="info"><h1 id="title">Aucun média</h1><p id="sub">Ajoute des fichiers audio ou vidéo pour commencer.</p></div>
+<div class="seek"><span id="cur">0:00</span><input type="range" id="seek" min="0" max="1000" value="0" aria-label="Position"><span id="dur">0:00</span></div>
+
+<div class="ctrl">
+<button id="shuf" aria-label="Aléatoire">⇄</button>
+<button id="prev" aria-label="Précédent">⏮</button>
+<button class="pri play" id="play" aria-label="Lecture">▶</button>
+<button id="next" aria-label="Suivant">⏭</button>
+<button id="rep" aria-label="Répéter">↻</button>
+</div>
+
+<div class="tools">
+<button id="spd">1×</button>
+<button id="ab">A–B</button>
+<button id="slp">☾ Minuteur</button>
+<button id="eqb">Égaliseur</button>
+<button id="subb">Sous-titres</button>
+<button id="pip">PiP</button>
+<button id="fs">Plein écran</button>
+<div class="vol">🔊<input type="range" id="vol" min="0" max="1" step="0.01" value="1" aria-label="Volume"></div>
+</div>
+
+<div class="panel" id="eq" hidden>
+<label><span>Basses</span><input type="range" id="e0" min="-12" max="12" value="0"></label>
+<label><span>Médiums</span><input type="range" id="e1" min="-12" max="12" value="0"></label>
+<label><span>Aigus</span><input type="range" id="e2" min="-12" max="12" value="0"></label>
+</div>
+
+<input class="find" id="find" placeholder="Rechercher dans la liste…" hidden>
+<ul id="list"></ul>
+<div class="empty" id="empty">Touche <b>＋ Fichiers</b> ou dépose des fichiers ici.<br>Lecture en arrière-plan, reprise automatique, vitesse, boucle A–B, minuteur, égaliseur et sous-titres.</div>
+</div>
+
+<input type="file" id="files" multiple accept="audio/*,video/*" hidden>
+<input type="file" id="folder" webkitdirectory hidden>
+<input type="file" id="subf" accept=".srt,.vtt" hidden>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var m=$("#m"),q=[],idx=-1,shuf=false,rep=0,ab=[null,null],ctx,an,data,eq=[],sleepEnd=0,sleepT=0,seeking=false;
+var SPEEDS=[0.75,1,1.25,1.5,2],sp=1,SLEEPS=[0,15,30,60];
+function fmt(s){if(!isFinite(s))return"0:00";s=Math.floor(s);var h=Math.floor(s/3600),mi=Math.floor(s%3600/60),se=s%60;return(h?h+":"+String(mi).padStart(2,"0"):mi)+":"+String(se).padStart(2,"0")}
+function toast(t){var e=$("#toast");e.textContent=t;e.classList.add("s");clearTimeout(toast.t);toast.t=setTimeout(function(){e.classList.remove("s")},1300)}
+function hue(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
+function cur(){return q[idx]}
+function size(n){return n<1048576?(n/1024).toFixed(0)+" Ko":(n/1048576).toFixed(1)+" Mo"}
+
+function add(files){
+  var list=Array.prototype.filter.call(files,function(f){return /^(audio|video)\//.test(f.type)||/\.(mp3|m4a|aac|wav|ogg|opus|flac|mp4|mkv|webm|mov)$/i.test(f.name)});
+  if(!list.length){toast("Aucun fichier audio ou vidéo");return}
+  list.forEach(function(f){q.push({name:f.name.replace(/\.[^.]+$/,""),url:URL.createObjectURL(f),v:/^video\//.test(f.type)||/\.(mp4|mkv|webm|mov)$/i.test(f.name),size:f.size,key:f.name+"|"+f.size})});
+  render();toast(list.length+" fichier(s) ajouté(s)");
+  if(idx<0)play(0)
+}
+function render(){
+  var term=$("#find").value.trim().toLowerCase(),ul=$("#list");ul.textContent="";
+  $("#empty").hidden=q.length>0;$("#find").hidden=q.length<2;
+  q.forEach(function(t,i){
+    if(term&&t.name.toLowerCase().indexOf(term)<0)return;
+    var li=document.createElement("li");if(i===idx)li.className="cur";
+    li.innerHTML='<span class="ic"></span><span class="tx"><b></b><small></small></span><button class="x" aria-label="Retirer">✕</button>';
+    li.querySelector(".ic").textContent=t.v?"▶":"♫";li.querySelector("b").textContent=t.name;
+    li.querySelector("small").textContent=(t.v?"Vidéo":"Audio")+" · "+size(t.size);
+    li.addEventListener("click",function(){play(i)});
+    li.querySelector(".x").addEventListener("click",function(e){e.stopPropagation();remove(i)});
+    ul.appendChild(li)
+  })
+}
+function remove(i){
+  URL.revokeObjectURL(q[i].url);q.splice(i,1);
+  if(i<idx)idx--;else if(i===idx){if(q.length){play(Math.min(i,q.length-1))}else{idx=-1;m.removeAttribute("src");m.load();ui()}}
+  render()
+}
+function audioGraph(){
+  if(ctx)return;
+  try{
+    ctx=new(window.AudioContext||window.webkitAudioContext)();
+    var s=ctx.createMediaElementSource(m);an=ctx.createAnalyser();an.fftSize=256;data=new Uint8Array(an.frequencyBinCount);
+    var types=["lowshelf","peaking","highshelf"],freqs=[120,1000,6000],prev=s;
+    eq=types.map(function(t,i){var f=ctx.createBiquadFilter();f.type=t;f.frequency.value=freqs[i];prev.connect(f);prev=f;return f});
+    prev.connect(an);an.connect(ctx.destination)
+  }catch(e){ctx=null;an=null}
+}
+function play(i){
+  if(i<0||i>=q.length)return;
+  var t=q[i];idx=i;ab=[null,null];$("#ab").textContent="A–B";$("#ab").classList.remove("on");
+  m.querySelectorAll("track").forEach(function(x){x.remove()});
+  m.src=t.url;m.playbackRate=sp;
+  document.documentElement.style.setProperty("--a","hsl("+hue(t.name)+" 85% 66%)");
+  var saved=parseFloat(localStorage.getItem("pos:"+t.key)||"0");
+  m.onloadedmetadata=function(){if(saved>3&&saved<m.duration-5){m.currentTime=saved;toast("Reprise à "+fmt(saved))}$("#dur").textContent=fmt(m.duration)};
+  audioGraph();if(ctx&&ctx.state==="suspended")ctx.resume();
+  var p=m.play();if(p&&p.catch)p.catch(function(){});
+  ui();render();session()
+}
+function ui(){
+  var t=cur();
+  $("#stage").classList.toggle("vid",!!(t&&t.v));
+  $("#title").textContent=t?t.name:"Aucun média";
+  $("#sub").textContent=t?(idx+1)+" sur "+q.length+" · "+(t.v?"Vidéo":"Audio"):"Ajoute des fichiers audio ou vidéo pour commencer.";
+  $("#play").textContent=m.paused?"▶":"⏸";
+  $("#shuf").classList.toggle("on",shuf);
+  $("#rep").classList.toggle("on",rep>0);$("#rep").textContent=rep===2?"↻1":"↻"
+}
+function session(){
+  if(!("mediaSession" in navigator)||!cur())return;
+  navigator.mediaSession.metadata=new MediaMetadata({title:cur().name,artist:"Aurore Files"});
+  var h={play:function(){m.play()},pause:function(){m.pause()},previoustrack:prev,nexttrack:function(){next(true)},seekto:function(e){m.currentTime=e.seekTime},seekbackward:function(){m.currentTime-=10},seekforward:function(){m.currentTime+=10}};
+  Object.keys(h).forEach(function(k){try{navigator.mediaSession.setActionHandler(k,h[k])}catch(e){}})
+}
+function next(manual){
+  if(!q.length)return;
+  if(rep===2&&!manual){m.currentTime=0;m.play();return}
+  if(shuf&&q.length>1){var n;do{n=Math.floor(Math.random()*q.length)}while(n===idx);play(n);return}
+  if(idx<q.length-1)play(idx+1);else if(rep===1||manual)play(0);else{m.pause();ui()}
+}
+function prev(){if(m.currentTime>3){m.currentTime=0}else if(idx>0)play(idx-1);else play(q.length-1)}
+function toggle(){if(idx<0){$("#files").click();return}if(ctx&&ctx.state==="suspended")ctx.resume();m.paused?m.play():m.pause()}
+
+m.addEventListener("play",ui);m.addEventListener("pause",ui);m.addEventListener("ended",function(){next(false)});
+m.addEventListener("timeupdate",function(){
+  var d=m.duration||0;
+  if(!seeking){$("#seek").value=d?m.currentTime/d*1000:0}
+  $("#cur").textContent=fmt(m.currentTime);
+  if(ab[0]!==null&&ab[1]!==null&&m.currentTime>=ab[1])m.currentTime=ab[0];
+  if(cur()&&Math.floor(m.currentTime)%3===0)try{localStorage.setItem("pos:"+cur().key,String(m.currentTime))}catch(e){}
+});
+$("#seek").addEventListener("input",function(){seeking=true;if(m.duration)$("#cur").textContent=fmt(this.value/1000*m.duration)});
+$("#seek").addEventListener("change",function(){if(m.duration)m.currentTime=this.value/1000*m.duration;seeking=false});
+
+$("#play").onclick=toggle;$("#next").onclick=function(){next(true)};$("#prev").onclick=prev;
+$("#shuf").onclick=function(){shuf=!shuf;ui();toast(shuf?"Lecture aléatoire":"Ordre normal")};
+$("#rep").onclick=function(){rep=(rep+1)%3;ui();toast(["Répétition désactivée","Répéter la liste","Répéter ce titre"][rep])};
+$("#spd").onclick=function(){sp=SPEEDS[(SPEEDS.indexOf(sp)+1)%SPEEDS.length];m.playbackRate=sp;this.textContent=sp+"×";toast("Vitesse "+sp+"×")};
+$("#ab").onclick=function(){
+  if(!cur())return;
+  if(ab[0]===null){ab[0]=m.currentTime;this.textContent="A→";this.classList.add("on");toast("Point A défini")}
+  else if(ab[1]===null){ab[1]=m.currentTime;this.textContent="A–B ✓";toast("Boucle A–B active")}
+  else{ab=[null,null];this.textContent="A–B";this.classList.remove("on");toast("Boucle supprimée")}
+};
+$("#slp").onclick=function(){
+  var cur2=SLEEPS.indexOf(this.dataset.m?+this.dataset.m:0),n=SLEEPS[(cur2+1)%SLEEPS.length];this.dataset.m=n;
+  clearTimeout(sleepT);
+  if(n){sleepT=setTimeout(function(){fade()},n*60000);this.textContent="☾ "+n+" min";this.classList.add("on");toast("Arrêt dans "+n+" min")}
+  else{this.textContent="☾ Minuteur";this.classList.remove("on");toast("Minuteur désactivé")}
+};
+function fade(){var v=m.volume,s=v/20,k=setInterval(function(){m.volume=Math.max(0,m.volume-s);if(m.volume<=.01){clearInterval(k);m.pause();m.volume=v;$("#slp").textContent="☾ Minuteur";$("#slp").classList.remove("on");$("#slp").dataset.m=0}},150)}
+$("#eqb").onclick=function(){$("#eq").hidden=!$("#eq").hidden;this.classList.toggle("on",!$("#eq").hidden);audioGraph()};
+["e0","e1","e2"].forEach(function(id,i){$("#"+id).addEventListener("input",function(){if(eq[i])eq[i].gain.value=+this.value})});
+$("#subb").onclick=function(){$("#subf").click()};
+$("#subf").onchange=function(){
+  var f=this.files[0];if(!f)return;
+  f.text().then(function(t){
+    if(!/^\uFEFF?WEBVTT/.test(t))t="WEBVTT\n\n"+t.replace(/\r/g,"").replace(/(\d+:\d+:\d+),(\d+)/g,"$1.$2");
+    m.querySelectorAll("track").forEach(function(x){x.remove()});
+    var tr=document.createElement("track");tr.kind="subtitles";tr.default=true;tr.src=URL.createObjectURL(new Blob([t],{type:"text/vtt"}));m.appendChild(tr);tr.addEventListener("load",function(){tr.track.mode="showing"});
+    toast("Sous-titres chargés")
+  });this.value=""
+};
+$("#pip").onclick=function(){
+  if(!cur()||!cur().v){toast("PiP : vidéo uniquement");return}
+  if(document.pictureInPictureElement)document.exitPictureInPicture();else if(m.requestPictureInPicture)m.requestPictureInPicture().catch(function(){toast("PiP indisponible")})
+};
+$("#fs").onclick=function(){
+  var s=$("#stage");if(document.fullscreenElement)document.exitFullscreen();else if(s.requestFullscreen)s.requestFullscreen().catch(function(){})
+};
+$("#vol").addEventListener("input",function(){m.volume=+this.value});
+$("#find").addEventListener("input",render);
+
+$("#add").onclick=function(){$("#files").click()};
+$("#dir").onclick=function(){$("#folder").click()};
+$("#files").onchange=function(){add(this.files);this.value=""};
+$("#folder").onchange=function(){add(this.files);this.value=""};
+["dragenter","dragover"].forEach(function(e){window.addEventListener(e,function(ev){ev.preventDefault();document.body.classList.add("drop")})});
+["dragleave","drop"].forEach(function(e){window.addEventListener(e,function(ev){ev.preventDefault();document.body.classList.remove("drop")})});
+window.addEventListener("drop",function(ev){if(ev.dataTransfer&&ev.dataTransfer.files)add(ev.dataTransfer.files)});
+
+/* Gestes sur la vidéo : double toucher = ±10 s ; glisser à droite = volume, à gauche = luminosité */
+(function(){
+  var st=$("#stage"),sx,sy,sv,sb,side,last=0,moved=false;
+  st.addEventListener("pointerdown",function(e){var r=st.getBoundingClientRect();sx=e.clientX;sy=e.clientY;side=(e.clientX-r.left)/r.width;sv=m.volume;sb=parseFloat($("#bright").style.opacity||"0");moved=false});
+  st.addEventListener("pointermove",function(e){
+    if(sx==null||!cur()||!cur().v)return;var dy=sy-e.clientY;if(Math.abs(dy)<10&&!moved)return;moved=true;var k=dy/st.clientHeight;
+    if(side>.5){m.volume=Math.max(0,Math.min(1,sv+k));$("#vol").value=m.volume;toast("Volume "+Math.round(m.volume*100)+"%")}
+    else{var b=Math.max(0,Math.min(.8,sb-k));$("#bright").style.opacity=b;toast("Luminosité "+Math.round((1-b)*100)+"%")}
+  });
+  st.addEventListener("pointerup",function(e){
+    sx=null;if(moved)return;var now=Date.now();
+    if(now-last<320){var r=st.getBoundingClientRect(),x=(e.clientX-r.left)/r.width;if(x<.4){m.currentTime-=10;toast("−10 s")}else if(x>.6){m.currentTime+=10;toast("+10 s")}else toggle();last=0}else last=now
+  })
+})();
+
+/* Visualiseur */
+function draw(){
+  requestAnimationFrame(draw);
+  var c=$("#viz");if(!an||(cur()&&cur().v))return;
+  var x=c.getContext("2d"),dp=window.devicePixelRatio||1,w=c.width=c.clientWidth*dp,h=c.height=c.clientHeight*dp;
+  x.clearRect(0,0,w,h);an.getByteFrequencyData(data);
+  var n=40,bw=w/n,col=getComputedStyle(document.documentElement).getPropertyValue("--a");
+  for(var k=0;k<n;k++){var v=data[k+2]/255,bh=Math.max(5*dp,v*h*.92);x.globalAlpha=.3+v*.7;x.fillStyle=col;x.fillRect(k*bw+bw*.16,h-bh,bw*.68,bh)}
+}
+draw();
+
+document.addEventListener("keydown",function(e){
+  if(/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.code==="Space"){e.preventDefault();toggle()}
+  else if(e.code==="ArrowRight")m.currentTime+=5;else if(e.code==="ArrowLeft")m.currentTime-=5;
+  else if(e.key==="n")next(true);else if(e.key==="p")prev()
+});
+ui();
+})();
+</script>
+</body>
+</html>
