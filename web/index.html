@@ -12,6 +12,32 @@ body{margin:0;background:radial-gradient(900px 500px at 15% -10%,rgba(139,92,246
 button,input{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
 .app{max-width:560px;margin:0 auto;padding:12px 14px 24px}
+.player-view{display:none}
+.home{max-width:560px;margin:0 auto;padding:12px 18px calc(92px + env(safe-area-inset-bottom));color:#202124;background:#f7f9fc;min-height:100vh;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body:has(.home.active){background:#f7f9fc}
+.home-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 18px}
+.home-brand{display:flex;align-items:center;gap:11px;font-size:20px;font-weight:650;letter-spacing:-.4px;color:#202124}
+.home-logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,#4285f4,#34a853 55%,#fbbc04);display:grid;place-items:center;color:white;font-size:19px}
+.home-icon{width:42px;height:42px;border:0;border-radius:50%;display:grid;place-items:center;color:#414751;font-size:22px;background:transparent}
+.home-search{display:flex;align-items:center;gap:10px;background:#e9eef6;border-radius:28px;padding:0 16px;height:52px;margin-bottom:25px;color:#5e6571}
+.home-search input{border:0;outline:0;background:transparent;width:100%;color:#202124;font-size:15px;min-width:0}
+.home-section{margin:0 0 26px}.home-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.home-section h2{font-size:13px;letter-spacing:1.1px;font-weight:700;color:#5f6368;margin:0}.home-see{border:0;color:#1967d2;font-size:13px;padding:7px 2px}
+.home-recent{display:flex;gap:12px;overflow-x:auto;padding:2px 0 5px;scrollbar-width:none}.home-recent::-webkit-scrollbar{display:none}
+.recent-card{flex:0 0 145px;min-width:0;text-align:left;background:#fff;border:1px solid #e0e4eb;border-radius:18px;overflow:hidden;padding:0;color:#202124}
+.recent-art{height:90px;display:grid;place-items:center;background:linear-gradient(135deg,#dce8fb,#e5e9f5);font-size:30px;color:#3975ce}
+.recent-copy{padding:11px 12px 13px}.recent-copy b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.recent-copy span{display:block;color:#6b717a;font-size:12px;margin-top:3px}
+.recent-empty{min-width:100%;padding:18px;border:1px dashed #cbd3df;border-radius:18px;color:#69717e;background:rgba(255,255,255,.55);display:flex;align-items:center;gap:13px}
+.recent-empty .empty-icon{width:42px;height:42px;border-radius:14px;background:#e8effb;color:#2869c7;display:grid;place-items:center;font-size:20px;flex:none}
+.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.category-tile{display:flex;align-items:center;gap:12px;min-height:70px;padding:12px;background:#fff;border:1px solid #e5e8ef;border-radius:17px;text-align:left;color:#252a31;min-width:0}
+.category-tile:active{background:#eaf1fd}.category-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:18px;background:#edf3ff;color:#2871d1}
+.category-icon.green{background:#e6f4ea;color:#188b51}.category-icon.red{background:#fce8e6;color:#c5221f}.category-icon.purple{background:#f0e9fc;color:#8430ce}.category-icon.teal{background:#e0f2f1;color:#087e78}
+.category-copy{min-width:0}.category-copy b{display:block;font-size:13px;font-weight:650}.category-copy span{display:block;color:#707782;font-size:11px;margin-top:3px}
+.home-collections{display:grid;grid-template-columns:1fr 1fr;gap:10px}.collection-tile{display:flex;align-items:center;gap:10px;padding:15px 12px;border:1px solid #e5e8ef;border-radius:16px;background:#fff;color:#343941;text-align:left;font-size:13px}.collection-tile span:first-child{font-size:19px;color:#5f6b7a}
+.home-bottom{position:fixed;z-index:10;left:0;right:0;bottom:0;padding:8px 18px calc(8px + env(safe-area-inset-bottom));background:rgba(247,249,252,.96);backdrop-filter:blur(18px);border-top:1px solid #e6eaf0;display:flex;justify-content:center}
+.home-bottom-inner{width:100%;max-width:520px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tab{border:0;border-radius:18px;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#606875;font-size:11px;background:transparent}
+.home-tab .tab-icon{font-size:20px;line-height:1.1}.home-tab.active{background:#dce8fb;color:#174ea6;font-weight:650}.home-note{font-size:12px;color:#69717e;line-height:1.6;margin:0}.home-toast{position:fixed;z-index:20;left:50%;bottom:86px;transform:translateX(-50%);max-width:calc(100vw - 32px);padding:11px 16px;border-radius:14px;background:#263238;color:#fff;font-size:13px;box-shadow:0 6px 24px #0002;opacity:0;pointer-events:none;transition:opacity .2s}.home-toast.show{opacity:1}
+@media(max-width:360px){.home{padding-left:13px;padding-right:13px}.category-grid{gap:8px}.category-tile{padding:9px;gap:8px}.category-icon{width:34px;height:34px}.recent-card{flex-basis:132px}}
 header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 12px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px}
 .logo{width:34px;height:34px;border-radius:11px;background:var(--grad);display:grid;place-items:center;box-shadow:0 6px 22px rgba(139,92,246,.45)}
@@ -71,10 +97,25 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 </style>
 </head>
 <body>
-<div class="app" id="app">
+<section class="home active" id="home">
+ <header class="home-top"><div class="home-brand"><div class="home-logo">✦</div>Aurore Files</div><button class="home-icon" id="homeSearchBtn" aria-label="Rechercher">⌕</button></header>
+ <label class="home-search"><span aria-hidden="true">⌕</span><input id="homeSearch" type="search" placeholder="Rechercher dans les fichiers" autocomplete="off"></label><div class="home-toast" id="homeToast" role="status" aria-live="polite"></div>
+ <section class="home-section"><div class="home-section-head"><h2>RÉCENTS</h2><button class="home-see" id="recentAll">Tout afficher</button></div><div class="home-recent" id="homeRecent"><div class="recent-empty"><span class="empty-icon">▤</span><span>Aucun fichier ouvert récemment.<br>Choisis un fichier pour commencer.</span></div></div></section>
+ <section class="home-section"><div class="home-section-head"><h2>CATÉGORIES</h2></div><div class="category-grid">
+ <button class="category-tile" data-kind="all"><span class="category-icon">⇩</span><span class="category-copy"><b>Téléchargements</b><span>Ouvrir des médias</span></span></button>
+ <button class="category-tile" data-kind="images"><span class="category-icon red">▧</span><span class="category-copy"><b>Images</b><span>Choisir des images</span></span></button>
+ <button class="category-tile" data-kind="video"><span class="category-icon green">▷</span><span class="category-copy"><b>Vidéos</b><span>Lire une vidéo</span></span></button>
+ <button class="category-tile" data-kind="audio"><span class="category-icon purple">♫</span><span class="category-copy"><b>Audio</b><span>Écouter de la musique</span></span></button>
+ <button class="category-tile" data-kind="docs"><span class="category-icon teal">▤</span><span class="category-copy"><b>Documents</b><span>Choisir un fichier</span></span></button>
+ <button class="category-tile" data-kind="folder"><span class="category-icon">▱</span><span class="category-copy"><b>Parcourir</b><span>Choisir un dossier</span></span></button>
+ </div></section>
+ <section class="home-section"><div class="home-section-head"><h2>COLLECTIONS</h2></div><div class="home-collections"><button class="collection-tile" id="homeFavorites"><span>☆</span>Favoris</button><button class="collection-tile" id="homePrivate"><span>▣</span>Fichiers privés</button></div><p class="home-note" style="margin-top:10px">L’accès aux fichiers dépend des éléments que tu sélectionnes sur ton appareil.</p></section>
+ <nav class="home-bottom"><div class="home-bottom-inner"><button class="home-tab active" data-tab="home"><span class="tab-icon">⌂</span>Accueil</button><button class="home-tab" data-tab="audio"><span class="tab-icon">♫</span>Audio</button><button class="home-tab" data-tab="video"><span class="tab-icon">▷</span>Vidéos</button></div></nav>
+</section>
+<div class="app player-view" id="app">
 <header>
  <div class="brand"><div class="logo">♫</div>Aurore Files</div>
- <div class="add"><button class="pill" id="bAdd">＋ Fichiers</button><button class="pill" id="bDir">Dossier</button></div>
+ <div class="add"><button class="pill" id="bHome">← Accueil</button><button class="pill" id="bAdd">＋ Fichiers</button><button class="pill" id="bDir">Dossier</button></div>
 </header>
 <input type="file" id="fFiles" accept="audio/*,video/*" multiple class="hid">
 <input type="file" id="fDir" webkitdirectory multiple class="hid">
@@ -138,6 +179,9 @@ function size(n){return n<1048576?(n/1024).toFixed(0)+' Ko':(n/1048576).toFixed(
 function hue(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
 function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(function(){e.classList.remove('show')},1500)}
 function fill(r){r.style.setProperty('--p',((r.value-r.min)/(r.max-r.min)*100)+'%')}
+function showPlayer(){document.getElementById('home').classList.remove('active');document.getElementById('home').style.display='none';document.getElementById('app').style.display='block';window.scrollTo(0,0)}
+function showHome(){document.getElementById('app').style.display='none';document.getElementById('home').style.display='block';document.getElementById('home').classList.add('active');window.scrollTo(0,0)}
+function homeToast(message){var e=document.getElementById('homeToast');e.textContent=message;e.classList.add('show');clearTimeout(homeToast.t);homeToast.t=setTimeout(function(){e.classList.remove('show')},2200)}
 
 /* ---------- ajout de fichiers ---------- */
 function addFiles(files){
@@ -145,12 +189,12 @@ function addFiles(files){
  if(!arr.length){toast('Aucun fichier audio ou vidéo reconnu');return}
  var first=pl.length;
  arr.forEach(function(f){pl.push({f:f,url:URL.createObjectURL(f),name:f.name.replace(/\.[^.]+$/,''),v:/^video\//.test(f.type)||/\.(mp4|m4v|webm|mkv|mov|avi|3gp)$/i.test(f.name)})});
- render();toast(arr.length+' fichier(s) ajouté(s)');
- if(idx<0)load(first,true);
+ render();toast(arr.length+' fichier(s) ajouté(s)');showPlayer();
+ if(idx<0)load(first,true);updateHomeRecent(arr);
 }
 $('#bAdd').onclick=function(){$('#fFiles').click()};
 $('#bDir').onclick=function(){$('#fDir').click()};
-$('#fFiles').onchange=function(e){addFiles(e.target.files);e.target.value=''};
+$('#fFiles').onchange=function(e){addFiles(e.target.files);e.target.value='';e.target.accept='audio/*,video/*'};
 $('#fDir').onchange=function(e){addFiles(e.target.files);e.target.value=''};
 
 /* ---------- liste ---------- */
@@ -180,6 +224,15 @@ function remove(i){
  render();toast('Fichier retiré');
 }
 $('#q').oninput=render;
+function updateHomeRecent(files){var box=document.getElementById('homeRecent');box.innerHTML='';Array.prototype.slice.call(files,0,8).forEach(function(f){var b=document.createElement('button');b.className='recent-card';var art=document.createElement('div');art.className='recent-art';art.textContent=/^video\//.test(f.type)?'▷':'♫';var cp=document.createElement('div');cp.className='recent-copy';var nm=document.createElement('b');nm.textContent=f.name;var sub=document.createElement('span');sub.textContent=/^video\//.test(f.type)?'Vidéo':'Audio';cp.appendChild(nm);cp.appendChild(sub);b.appendChild(art);b.appendChild(cp);b.onclick=function(){var ix=pl.findIndex(function(x){return x.f===f});if(ix>=0)load(ix,true);showPlayer()};box.appendChild(b)})}
+document.getElementById('bHome').onclick=showHome;
+document.getElementById('homeSearchBtn').onclick=function(){document.getElementById('homeSearch').focus()};
+document.getElementById('homeSearch').onkeydown=function(e){if(e.key==='Enter'){document.getElementById('q').value=this.value;render();showPlayer()}};
+document.getElementById('recentAll').onclick=function(){document.getElementById('bAdd').click()};
+document.querySelectorAll('.category-tile').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-kind');if(k==='folder'){document.getElementById('fDir').click();return}if(k==='audio'||k==='video'){var input=document.getElementById('fFiles');input.accept=k==='audio'?'audio/*':'video/*';input.click();setTimeout(function(){input.accept='audio/*,video/*'},1000);return}if(k==='images'||k==='docs'){homeToast('Les images et documents seront pris en charge dans une prochaine étape.');return}document.getElementById('fFiles').click()}});
+document.querySelectorAll('.home-tab').forEach(function(b){b.onclick=function(){var t=b.getAttribute('data-tab');if(t==='home'){showHome();return}document.querySelectorAll('.home-tab').forEach(function(x){x.classList.remove('active')});b.classList.add('active');var input=document.getElementById('fFiles');input.accept=t==='audio'?'audio/*':'video/*';input.click();setTimeout(function(){input.accept='audio/*,video/*'},1000)}});
+document.getElementById('homeFavorites').onclick=function(){homeToast('Les favoris seront ajoutés dans une prochaine étape.')};
+document.getElementById('homePrivate').onclick=function(){homeToast('L’espace privé sera ajouté dans une prochaine étape.')};
 
 /* ---------- chargement / lecture ---------- */
 function setupAudio(){
