@@ -144,7 +144,7 @@ function addFiles(files){
  var arr=Array.prototype.filter.call(files,function(f){return /^(audio|video)\//.test(f.type)||EXT.test(f.name)});
  if(!arr.length){toast('Aucun fichier audio ou vidéo reconnu');return}
  var first=pl.length;
- arr.forEach(function(f){pl.push({f:f,url:URL.createObjectURL(f),name:f.name.replace(/\.[^.]+$/,''),v:/^video\\//.test(f.type)||/\\.(mp4|m4v|webm|mkv|mov|avi|3gp)$/i.test(f.name)})});
+ arr.forEach(function(f){pl.push({f:f,url:URL.createObjectURL(f),name:f.name.replace(/\.[^.]+$/,''),v:/^video\//.test(f.type)||/\.(mp4|m4v|webm|mkv|mov|avi|3gp)$/i.test(f.name)})});
  render();toast(arr.length+' fichier(s) ajouté(s)');
  if(idx<0)load(first,true);
 }
@@ -175,7 +175,7 @@ function remove(i){
  if(i<idx)idx--;
  else if(i===idx){
   if(pl.length)load(Math.min(i,pl.length-1),true);
-  else{idx=-1;m.pause();m.removeAttribute('src');m.load();stage.classList.remove('vid');app.classList.remove('playing');$('#title').textContent='Aucun média';$('#sub').textContent='Ajoute des fichiers audio ou vidéo pour commencer.';$('#cur').textContent='0:00';$('#dur').textContent='0:00';$('#seek').value=0;$('#bPlay').textContent='▶';document.title='Aurore Files — lecteur audio et vidéo'}
+  else{idx=-1;m.pause();clearSub();m.removeAttribute('src');m.load();stage.classList.remove('vid');app.classList.remove('playing');$('#title').textContent='Aucun média';$('#sub').textContent='Ajoute des fichiers audio ou vidéo pour commencer.';$('#cur').textContent='0:00';$('#dur').textContent='0:00';$('#seek').value=0;$('#bPlay').textContent='▶';document.title='Aurore Files — lecteur audio et vidéo'}
  }
  render();toast('Fichier retiré');
 }
@@ -209,6 +209,7 @@ function load(i,play){
  m.onloadedmetadata=function(){
   $('#dur').textContent=fmt(m.duration);
   var p=parseFloat(localStorage.getItem(key(it.f)));
+  if(!(p>5))p=parseFloat(localStorage.getItem('pos:'+it.f.name+'|'+it.f.size)||'0');
   if(p>5&&p<m.duration-5)m.currentTime=p;
  };
  render();
@@ -240,7 +241,7 @@ m.ontimeupdate=function(){
  $('#cur').textContent=fmt(m.currentTime);
  if(ab.b!==null&&ab.a!==null&&m.currentTime>=ab.b)m.currentTime=ab.a;
  var now=Date.now();
- if(idx>=0&&now-lastSave>3000){lastSave=now;try{localStorage.setItem(key(pl[idx].f),m.currentTime)}catch(e){}}
+ if(idx>=0&&now-lastSave>3000){lastSave=now;try{localStorage.setItem(key(pl[idx].f),m.currentTime);localStorage.setItem('pos:'+pl[idx].f.name+'|'+pl[idx].f.size,m.currentTime)}catch(e){}}
 };
 var seeking=false,sk=$('#seek');
 sk.oninput=function(){seeking=true;fill(sk);$('#cur').textContent=fmt(sk.value/1000*(m.duration||0))};
