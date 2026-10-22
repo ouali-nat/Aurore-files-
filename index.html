@@ -273,6 +273,17 @@ button:active{transform:translateY(1px)}
 @media(min-width:700px){.image-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:9px!important;padding:16px 18px 30px!important}.image-viewer{padding-left:24px!important;padding-right:24px!important}.image-menu{width:330px!important}}
 
 
+
+/* Palette globale Aurore Files : la couleur choisie s'applique à tous les panneaux et blocs du site */
+:root{--site-accent:#5d8ee8;--site-accent-soft:color-mix(in srgb,var(--site-accent) 13%,transparent);--site-accent-border:color-mix(in srgb,var(--site-accent) 48%,#ffffff)}
+body{--a1:var(--site-accent)}
+body :is(.access-card,.recent-card,.category-tile,.collection-tile,.recent-empty,.image-empty,.home-bottom,.home-tab,.viewer-toolbar,.viewer-edit-panel,.viewer-palette,.image-menu,.modal,.dialog,.panel,.card,.tile,.file-card,.folder-card,.media-card,.audio-card,.video-card,.tool-card,.settings-card,.empty-state,.drop-zone,.upload-zone,.section-card,.option-card,.action-card){border-color:var(--site-accent-border)!important}
+body :is(.access-card,.recent-card,.category-tile,.collection-tile,.recent-empty,.image-empty,.home-bottom,.viewer-toolbar,.viewer-edit-panel,.viewer-palette,.image-menu,.modal,.dialog,.panel,.card,.tile,.file-card,.folder-card,.media-card,.audio-card,.video-card,.tool-card,.settings-card,.empty-state,.drop-zone,.upload-zone,.section-card,.option-card,.action-card){background-color:var(--site-accent-soft)}
+body :is(button,.home-tab,.access-action,.viewer-tool,.primary,.primary-button,.action-button,[role="button"]){--button-accent:var(--site-accent)}
+body :is(.access-action,.home-tab.active,.viewer-tool[aria-pressed="true"],button.primary,button.primary-button,button.action-button){background:var(--site-accent)!important;border-color:var(--site-accent)!important;color:#fff!important}
+body :is(.access-symbol,.home-logo,.section-icon,.tile-icon,.card-icon){color:var(--site-accent)!important}
+body :is(input:focus,textarea:focus,select:focus){border-color:var(--site-accent)!important;outline-color:var(--site-accent)!important}
+
 /* Accueil : thème et palette réellement accessibles depuis la barre supérieure */
 .home-top-actions{display:flex;align-items:center;gap:7px}.home-top-actions .home-icon{display:grid;place-items:center;flex:none}
 .home{--home-accent:#5d8ee8;transition:background .2s,color .2s}.home .home-icon:focus-visible,.home-color-palette button:focus-visible{outline:2px solid var(--home-accent);outline-offset:2px}
@@ -742,7 +753,7 @@ document.addEventListener('keydown',function(e){
 })();
 
 /* Contrôles de thème et de couleur de l’accueil */
-(function(){var home=document.getElementById('home'),theme=document.getElementById('homeThemeToggle'),color=document.getElementById('homeColorToggle'),palette=document.getElementById('homeColorPalette');if(!home||!theme||!color||!palette)return;function setTheme(dark){home.classList.toggle('home-dark',dark);theme.textContent=dark?'☀':'☾';theme.title=dark?'Mode clair':'Mode sombre';theme.setAttribute('aria-label',dark?'Activer le mode clair':'Activer le mode sombre');theme.setAttribute('aria-pressed',String(dark));}theme.addEventListener('click',function(){setTheme(!home.classList.contains('home-dark'))});color.addEventListener('click',function(){palette.hidden=!palette.hidden;color.setAttribute('aria-pressed',String(!palette.hidden))});palette.querySelectorAll('[data-home-color]').forEach(function(b){b.addEventListener('click',function(){var c=b.getAttribute('data-home-color');home.style.setProperty('--home-accent',c);document.documentElement.style.setProperty('--home-accent',c);palette.querySelectorAll('button').forEach(function(x){x.style.outline=x===b?'2px solid currentColor':'none'});color.style.color=c;palette.hidden=false;})});})();
+(function(){var home=document.getElementById('home'),theme=document.getElementById('homeThemeToggle'),color=document.getElementById('homeColorToggle'),palette=document.getElementById('homeColorPalette');if(!home||!theme||!color||!palette)return;function setTheme(dark){home.classList.toggle('home-dark',dark);theme.textContent=dark?'☀':'☾';theme.title=dark?'Mode clair':'Mode sombre';theme.setAttribute('aria-label',dark?'Activer le mode clair':'Activer le mode sombre');theme.setAttribute('aria-pressed',String(dark));}theme.addEventListener('click',function(){setTheme(!home.classList.contains('home-dark'))});color.addEventListener('click',function(){palette.hidden=!palette.hidden;color.setAttribute('aria-pressed',String(!palette.hidden))});palette.querySelectorAll('[data-home-color]').forEach(function(b){b.addEventListener('click',function(){var c=b.getAttribute('data-home-color');home.style.setProperty('--home-accent',c);document.documentElement.style.setProperty('--home-accent',c);document.documentElement.style.setProperty('--site-accent',c);document.body.style.setProperty('--site-accent',c);palette.querySelectorAll('button').forEach(function(x){x.style.outline=x===b?'2px solid currentColor':'none'});color.style.color=c;palette.hidden=false;})});})();
 </script>
 </body>
 </html>
