@@ -365,7 +365,7 @@ if(navigator.mediaSession){
   ms.setActionHandler('play',function(){m.play()});
   ms.setActionHandler('pause',function(){m.pause()});
   ms.setActionHandler('previoustrack',prev);
-  ms.setActionHandler('nexttrack',function(){next(true)});
+  ms.setActionHandler('nexttrack',function(){next(false)});
   ms.setActionHandler('seekto',function(d){if(d.seekTime!=null)m.currentTime=d.seekTime});
   ms.setActionHandler('seekbackward',function(d){m.currentTime=Math.max(0,m.currentTime-(d.seekOffset||10))});
   ms.setActionHandler('seekforward',function(d){m.currentTime=Math.min(m.duration||Infinity,m.currentTime+(d.seekOffset||10))});
