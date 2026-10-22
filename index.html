@@ -313,7 +313,7 @@ document.getElementById('recentAll').onclick=function(){document.getElementById(
 
 /* ---------- lecteur et galerie d’images ---------- */
 function addImages(files){
- var incoming=Array.prototype.filter.call(files,function(f){return /^image\\//i.test(f.type)||/\\.(avif|bmp|gif|heic|heif|jpe?g|png|svg|tif?f|webp)$/i.test(f.name)});
+ var incoming=Array.prototype.filter.call(files,function(f){return /^image\//i.test(f.type)||/\.(avif|bmp|gif|heic|heif|jpe?g|png|svg|tif?f|webp)$/i.test(f.name)});
  if(!incoming.length){homeToast('Aucune image compatible trouvée.');return}
  incoming.forEach(function(f){
   var id=key(f);
