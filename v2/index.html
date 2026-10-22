@@ -114,9 +114,9 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
   <div class="access-copy">
    <div class="access-kicker">Configuration nécessaire</div>
    <h2 class="access-title" id="accessTitle">Accès aux fichiers de l’appareil</h2>
-   <p class="access-description">Choisis les fichiers que tu souhaites ouvrir dans Aurore Files, depuis ton téléphone.</p>
-   <button type="button" class="access-action" id="requestFilesAccess">＋ Sélectionner des fichiers <span aria-hidden="true">→</span></button>
-   <p class="access-footnote">À savoir : cette version web accède uniquement aux fichiers sélectionnés. L’autorisation Android donnant accès à tous les fichiers nécessite une intégration native.</p>
+   <p class="access-description">Choisis un dossier de ton téléphone : Aurore Files parcourra ses sous-dossiers pour repérer les médias compatibles.</p>
+   <button type="button" class="access-action" id="requestFilesAccess">＋ Autoriser l’accès à un dossier <span aria-hidden="true">→</span></button>
+   <p class="access-footnote">Le navigateur demandera ton accord pour le dossier choisi. Un site web ne peut pas activer l’accès global Android : cela nécessite une application Android native.</p>
   </div>
  </section>
  <section class="home-section"><div class="home-section-head"><h2>RÉCENTS</h2><button class="home-see" id="recentAll">Tout afficher</button></div><div class="home-recent" id="homeRecent"><div class="recent-empty"><span class="empty-icon">▤</span><span>Aucun fichier ouvert récemment.<br>Choisis un fichier pour commencer.</span></div></div></section>
@@ -244,7 +244,29 @@ function remove(i){
 }
 $('#q').oninput=render;
 function updateHomeRecent(files){var box=document.getElementById('homeRecent');box.innerHTML='';Array.prototype.slice.call(files,0,8).forEach(function(f){var b=document.createElement('button');b.className='recent-card';var art=document.createElement('div');art.className='recent-art';art.textContent=/^video\//.test(f.type)?'▷':'♫';var cp=document.createElement('div');cp.className='recent-copy';var nm=document.createElement('b');nm.textContent=f.name;var sub=document.createElement('span');sub.textContent=/^video\//.test(f.type)?'Vidéo':'Audio';cp.appendChild(nm);cp.appendChild(sub);b.appendChild(art);b.appendChild(cp);b.onclick=function(){var ix=pl.findIndex(function(x){return x.f===f});if(ix>=0)load(ix,true);showPlayer()};box.appendChild(b)})}
-document.getElementById('requestFilesAccess').onclick=function(){homeToast('Sélectionne les fichiers à ouvrir. L’accès intégral Android n’est pas disponible depuis cette page web.');document.getElementById('fFiles').click()};
+document.getElementById('requestFilesAccess').onclick=async function(){
+ try{
+  if(typeof window.showDirectoryPicker==='function'){
+   homeToast('Choisis un dossier à parcourir…');
+   var root=await window.showDirectoryPicker({mode:'read'});
+   var found=[];
+   async function scanDirectory(dir){
+    for await(var entry of dir.values()){
+     if(entry.kind==='directory'){await scanDirectory(entry)}
+     else if(EXT.test(entry.name)){try{found.push(await entry.getFile())}catch(ignore){}}
+    }
+   }
+   await scanDirectory(root);
+   if(found.length){addFiles(found);homeToast(found.length+' média(s) trouvé(s) dans « '+root.name+' »')}
+   else{homeToast('Aucun média compatible trouvé dans ce dossier.')}
+  }else{
+   homeToast('Choisis un dossier dans le sélecteur Android.');
+   document.getElementById('fDir').click();
+  }
+ }catch(err){
+  if(!err||err.name!=='AbortError'){homeToast('Impossible d’ouvrir ce dossier. Essaie « Parcourir ».')}
+ }
+};
 document.getElementById('bHome').onclick=showHome;
 document.getElementById('homeSearchBtn').onclick=function(){document.getElementById('homeSearch').focus()};
 document.getElementById('homeSearch').onkeydown=function(e){if(e.key==='Enter'){document.getElementById('q').value=this.value;render();showPlayer()}};
