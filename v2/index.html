@@ -21,6 +21,15 @@ body:has(.home.active){background:#f7f9fc}
 .home-icon{width:42px;height:42px;border:0;border-radius:50%;display:grid;place-items:center;color:#414751;font-size:22px;background:transparent}
 .home-search{display:flex;align-items:center;gap:10px;background:#e9eef6;border-radius:28px;padding:0 16px;height:52px;margin-bottom:25px;color:#5e6571}
 .home-search input{border:0;outline:0;background:transparent;width:100%;color:#202124;font-size:15px;min-width:0}
+.access-card{position:relative;overflow:hidden;display:flex;gap:14px;align-items:flex-start;padding:17px;margin:0 0 26px;border:1px solid #d5e3fa;border-radius:22px;background:linear-gradient(135deg,#eef5ff 0%,#f7faff 58%,#edf8f4 100%);box-shadow:0 5px 18px rgba(42,91,160,.07)}
+.access-card:before{content:"";position:absolute;width:125px;height:125px;right:-46px;top:-62px;border-radius:50%;background:rgba(66,133,244,.09)}
+.access-symbol{width:46px;height:46px;flex:none;display:grid;place-items:center;border-radius:15px;background:#dce9ff;color:#2467c7;font-size:23px}
+.access-copy{position:relative;min-width:0;flex:1}
+.access-kicker{font-size:10px;font-weight:800;letter-spacing:1px;color:#2467c7;text-transform:uppercase;margin:1px 0 5px}
+.access-title{font-size:16px;line-height:1.25;font-weight:750;color:#202b3b;margin:0 0 6px}
+.access-description{font-size:12px;line-height:1.5;color:#5c6879;margin:0 0 12px}
+.access-action{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:999px;background:#1967d2;color:#fff;font-size:13px;font-weight:700;box-shadow:0 3px 8px rgba(25,103,210,.18)}
+.access-footnote{font-size:11px;line-height:1.45;color:#687589;margin:10px 0 0}
 .home-section{margin:0 0 26px}.home-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
 .home-section h2{font-size:13px;letter-spacing:1.1px;font-weight:700;color:#5f6368;margin:0}.home-see{border:0;color:#1967d2;font-size:13px;padding:7px 2px}
 .home-recent{display:flex;gap:12px;overflow-x:auto;padding:2px 0 5px;scrollbar-width:none}.home-recent::-webkit-scrollbar{display:none}
@@ -100,6 +109,16 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 <section class="home active" id="home">
  <header class="home-top"><div class="home-brand"><div class="home-logo">✦</div>Aurore Files</div><button class="home-icon" id="homeSearchBtn" aria-label="Rechercher">⌕</button></header>
  <label class="home-search"><span aria-hidden="true">⌕</span><input id="homeSearch" type="search" placeholder="Rechercher dans les fichiers" autocomplete="off"></label><div class="home-toast" id="homeToast" role="status" aria-live="polite"></div>
+ <section class="access-card" aria-labelledby="accessTitle">
+  <div class="access-symbol" aria-hidden="true">▣</div>
+  <div class="access-copy">
+   <div class="access-kicker">Configuration nécessaire</div>
+   <h2 class="access-title" id="accessTitle">Accès aux fichiers de l’appareil</h2>
+   <p class="access-description">Choisis les fichiers que tu souhaites ouvrir dans Aurore Files, depuis ton téléphone.</p>
+   <button type="button" class="access-action" id="requestFilesAccess">＋ Sélectionner des fichiers <span aria-hidden="true">→</span></button>
+   <p class="access-footnote">À savoir : cette version web accède uniquement aux fichiers sélectionnés. L’autorisation Android donnant accès à tous les fichiers nécessite une intégration native.</p>
+  </div>
+ </section>
  <section class="home-section"><div class="home-section-head"><h2>RÉCENTS</h2><button class="home-see" id="recentAll">Tout afficher</button></div><div class="home-recent" id="homeRecent"><div class="recent-empty"><span class="empty-icon">▤</span><span>Aucun fichier ouvert récemment.<br>Choisis un fichier pour commencer.</span></div></div></section>
  <section class="home-section"><div class="home-section-head"><h2>CATÉGORIES</h2></div><div class="category-grid">
  <button class="category-tile" data-kind="all"><span class="category-icon">⇩</span><span class="category-copy"><b>Téléchargements</b><span>Ouvrir des médias</span></span></button>
@@ -225,6 +244,7 @@ function remove(i){
 }
 $('#q').oninput=render;
 function updateHomeRecent(files){var box=document.getElementById('homeRecent');box.innerHTML='';Array.prototype.slice.call(files,0,8).forEach(function(f){var b=document.createElement('button');b.className='recent-card';var art=document.createElement('div');art.className='recent-art';art.textContent=/^video\//.test(f.type)?'▷':'♫';var cp=document.createElement('div');cp.className='recent-copy';var nm=document.createElement('b');nm.textContent=f.name;var sub=document.createElement('span');sub.textContent=/^video\//.test(f.type)?'Vidéo':'Audio';cp.appendChild(nm);cp.appendChild(sub);b.appendChild(art);b.appendChild(cp);b.onclick=function(){var ix=pl.findIndex(function(x){return x.f===f});if(ix>=0)load(ix,true);showPlayer()};box.appendChild(b)})}
+document.getElementById('requestFilesAccess').onclick=function(){homeToast('Sélectionne les fichiers à ouvrir. L’accès intégral Android n’est pas disponible depuis cette page web.');document.getElementById('fFiles').click()};
 document.getElementById('bHome').onclick=showHome;
 document.getElementById('homeSearchBtn').onclick=function(){document.getElementById('homeSearch').focus()};
 document.getElementById('homeSearch').onkeydown=function(e){if(e.key==='Enter'){document.getElementById('q').value=this.value;render();showPlayer()}};
