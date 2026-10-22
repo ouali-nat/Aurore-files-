@@ -272,11 +272,19 @@ button:active{transform:translateY(1px)}
 @media(max-width:420px){.image-viewer{padding-left:12px!important;padding-right:12px!important;gap:8px!important}.viewer-stage{padding:12px!important;border-radius:18px!important}.image-menu{width:min(300px,calc(100vw - 24px))!important}.image-menu button{min-height:46px!important;padding:10px 11px!important}}
 @media(min-width:700px){.image-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:9px!important;padding:16px 18px 30px!important}.image-viewer{padding-left:24px!important;padding-right:24px!important}.image-menu{width:330px!important}}
 
+
+/* Accueil : thème et palette réellement accessibles depuis la barre supérieure */
+.home-top-actions{display:flex;align-items:center;gap:7px}.home-top-actions .home-icon{display:grid;place-items:center;flex:none}
+.home{--home-accent:#5d8ee8;transition:background .2s,color .2s}.home .home-icon:focus-visible,.home-color-palette button:focus-visible{outline:2px solid var(--home-accent);outline-offset:2px}
+.home-color-palette{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 16px 12px;padding:12px 14px;border-radius:16px;background:#f0f1f4;border:1px solid #d8dce4;box-shadow:4px 4px 10px #d2d4d7,-4px -4px 10px #fff;color:#303846;font-size:12px}
+.home-color-palette[hidden]{display:none}.home-color-palette span{width:100%;font-weight:700}.home-color-palette button{width:29px;height:29px;border-radius:50%;background:var(--swatch);border:2px solid #fff;box-shadow:0 0 0 1px #0002;cursor:pointer}
+.home .access-action,.home .home-tab.active,.home .home-icon[aria-pressed="true"]{background:var(--home-accent)!important;color:#fff!important}
+.home.home-dark{background:#171a21!important;color:#eef1f7!important}.home.home-dark .home-top,.home.home-dark .home-search,.home.home-dark .access-card,.home.home-dark .recent-card,.home.home-dark .category-tile,.home.home-dark .collection-tile,.home.home-dark .recent-empty,.home.home-dark .image-empty,.home.home-dark .home-bottom,.home.home-dark .home-tab{background:#222732!important;color:#eef1f7!important;border-color:#343b49!important;box-shadow:4px 4px 10px #11141a,-3px -3px 8px #2b303b!important}.home.home-dark .home-search input,.home.home-dark .access-title,.home.home-dark .access-description,.home.home-dark .home-brand,.home.home-dark .recent-card,.home.home-dark .category-tile,.home.home-dark .collection-tile{color:#eef1f7!important}.home.home-dark .home-search input{background:transparent}.home.home-dark .home-color-palette{background:#222732;color:#eef1f7;border-color:#343b49;box-shadow:none}.home.home-dark .home-tab.active{background:var(--home-accent)!important}
 </style>
 </head>
 <body>
 <section class="home active" id="home">
- <header class="home-top"><div class="home-brand"><div class="home-logo"></div>Aurore Files</div><button class="home-icon" id="homeSearchBtn" aria-label="Rechercher">⌕</button></header>
+ <header class="home-top"><div class="home-brand"><div class="home-logo"></div>Aurore Files</div><div class="home-top-actions"><button class="home-icon home-theme-toggle" id="homeThemeToggle" type="button" aria-label="Activer le mode sombre" title="Mode sombre">☾</button><button class="home-icon home-color-toggle" id="homeColorToggle" type="button" aria-label="Choisir une couleur" title="Couleurs">◉</button><button class="home-icon" id="homeSearchBtn" aria-label="Rechercher">⌕</button></div></header><div class="home-color-palette" id="homeColorPalette" hidden aria-label="Palette de couleurs"><span>Couleur du thème</span><button type="button" data-home-color="#5d8ee8" style="--swatch:#5d8ee8" aria-label="Bleu"></button><button type="button" data-home-color="#27b99a" style="--swatch:#27b99a" aria-label="Vert"></button><button type="button" data-home-color="#a779ed" style="--swatch:#a779ed" aria-label="Violet"></button><button type="button" data-home-color="#ed8d56" style="--swatch:#ed8d56" aria-label="Orange"></button><button type="button" data-home-color="#e45d80" style="--swatch:#e45d80" aria-label="Rose"></button><button type="button" data-home-color="#e0b83e" style="--swatch:#e0b83e" aria-label="Jaune"></button><button type="button" data-home-color="#303846" style="--swatch:#303846" aria-label="Ardoise"></button></div>
  <label class="home-search"><span aria-hidden="true">⌕</span><input id="homeSearch" type="search" placeholder="Rechercher dans les fichiers" autocomplete="off"></label><div class="home-toast" id="homeToast" role="status" aria-live="polite"></div>
  <section class="access-card" aria-labelledby="accessTitle">
   <div class="access-symbol" aria-hidden="true">▣</div>
@@ -732,6 +740,9 @@ document.addEventListener('keydown',function(e){
  else if(e.key==='n')next(true);else if(e.key==='p')prev();
 });
 })();
+
+/* Contrôles de thème et de couleur de l’accueil */
+(function(){var home=document.getElementById('home'),theme=document.getElementById('homeThemeToggle'),color=document.getElementById('homeColorToggle'),palette=document.getElementById('homeColorPalette');if(!home||!theme||!color||!palette)return;function setTheme(dark){home.classList.toggle('home-dark',dark);theme.textContent=dark?'☀':'☾';theme.title=dark?'Mode clair':'Mode sombre';theme.setAttribute('aria-label',dark?'Activer le mode clair':'Activer le mode sombre');theme.setAttribute('aria-pressed',String(dark));}theme.addEventListener('click',function(){setTheme(!home.classList.contains('home-dark'))});color.addEventListener('click',function(){palette.hidden=!palette.hidden;color.setAttribute('aria-pressed',String(!palette.hidden))});palette.querySelectorAll('[data-home-color]').forEach(function(b){b.addEventListener('click',function(){var c=b.getAttribute('data-home-color');home.style.setProperty('--home-accent',c);document.documentElement.style.setProperty('--home-accent',c);palette.querySelectorAll('button').forEach(function(x){x.style.outline=x===b?'2px solid currentColor':'none'});color.style.color=c;palette.hidden=false;})});})();
 </script>
 </body>
 </html>
