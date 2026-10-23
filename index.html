@@ -550,6 +550,119 @@ body:has(.app.player-view:not([style*="display: none"])) .app,
  .app.player-view *, .image-library *, .image-viewer *{animation:none!important;transition:none!important}
 }
 
+
+/* ---------- Visionneuse Aurore : contraste fiable + commandes modernes ---------- */
+.image-viewer{
+  --viewer-bg:#151923;--viewer-surface:#202633;--viewer-surface-2:#293140;
+  --viewer-fg:#f3f6fb;--viewer-muted:#b9c3d2;--viewer-border:#3a4556;
+  background:var(--viewer-bg)!important;color:var(--viewer-fg)!important;
+  gap:10px;padding:calc(12px + env(safe-area-inset-top)) 14px calc(12px + env(safe-area-inset-bottom))!important;
+}
+.image-viewer.viewer-light{
+  --viewer-bg:#f2f4f8;--viewer-surface:#fff;--viewer-surface-2:#e8edf4;
+  --viewer-fg:#202938;--viewer-muted:#596779;--viewer-border:#d5dde8;
+  background:var(--viewer-bg)!important;color:var(--viewer-fg)!important;
+}
+.image-viewer .viewer-top{
+  gap:8px;min-height:54px;padding:5px 0 10px;
+  border-bottom:1px solid var(--viewer-border);
+}
+.image-viewer .viewer-caption{padding:0 4px}
+.image-viewer .viewer-caption b{color:var(--viewer-fg)!important;font-size:14px;font-weight:750;letter-spacing:-.2px}
+.image-viewer .viewer-caption span{color:var(--viewer-muted)!important;font-size:12px}
+.image-viewer .viewer-btn{
+  width:42px;height:42px;min-width:42px;border-radius:14px!important;
+  display:grid;place-items:center;background:var(--viewer-surface)!important;
+  color:var(--viewer-fg)!important;border:1px solid var(--viewer-border)!important;
+  box-shadow:0 2px 5px rgba(0,0,0,.10)!important;font-size:21px;line-height:1;
+  -webkit-tap-highlight-color:transparent;
+}
+.image-viewer .viewer-btn:active,.image-viewer .viewer-tool:active{transform:scale(.97)}
+.image-viewer #viewerRotateTop{
+  background:var(--viewer-accent)!important;color:#fff!important;
+  border-color:transparent!important;border-radius:14px!important;
+  box-shadow:0 3px 9px color-mix(in srgb,var(--viewer-accent) 28%,transparent)!important;
+  font-size:24px;font-weight:700;
+}
+.image-viewer #viewerRotateTop::after{content:"";position:absolute}
+.image-viewer .viewer-tools{position:relative;flex:none}
+.image-viewer .viewer-stage{
+  flex:1;min-height:120px;margin:0;padding:8px;
+  border:1px solid var(--viewer-border);border-radius:22px;
+  background:var(--viewer-surface)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+.image-viewer.viewer-light .viewer-stage{background:#e7ebf2!important}
+.image-viewer .viewer-stage img{border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.22)!important}
+.image-viewer .viewer-toolbar{
+  gap:8px;padding:2px 0 5px;overflow-x:auto;overscroll-behavior-x:contain;
+}
+.image-viewer .viewer-tool{
+  min-height:42px;padding:10px 13px;border-radius:13px!important;
+  background:var(--viewer-surface)!important;color:var(--viewer-fg)!important;
+  border:1px solid var(--viewer-border)!important;box-shadow:none!important;
+  font-size:12px;font-weight:700;
+}
+.image-viewer .viewer-tool[aria-pressed="true"],
+.image-viewer .viewer-tool.active{
+  background:color-mix(in srgb,var(--viewer-accent) 17%,var(--viewer-surface))!important;
+  border-color:var(--viewer-accent)!important;
+}
+.image-viewer .viewer-edit-panel,.image-viewer .viewer-palette{
+  margin:0;padding:14px;border-radius:17px!important;max-height:32vh;
+  overflow:auto;background:var(--viewer-surface)!important;
+  color:var(--viewer-fg)!important;border:1px solid var(--viewer-border)!important;
+  box-shadow:0 4px 12px rgba(0,0,0,.08)!important;
+}
+.image-viewer .edit-panel-title,.image-viewer .viewer-palette>span{
+  color:var(--viewer-fg)!important;font-size:13px;font-weight:750;
+}
+.image-viewer .viewer-edit-panel label{
+  color:var(--viewer-muted)!important;font-weight:600;line-height:1.35;
+  grid-template-columns:minmax(86px,100px) minmax(0,1fr);
+}
+.image-viewer .viewer-edit-panel p{color:var(--viewer-muted)!important;opacity:1!important;font-size:11px}
+.image-viewer .viewer-edit-panel input{accent-color:var(--viewer-accent)}
+.image-viewer .edit-presets{gap:8px}
+.image-viewer .edit-presets button{
+  min-height:38px;padding:8px 11px;border-radius:11px!important;
+  background:var(--viewer-surface-2)!important;color:var(--viewer-fg)!important;
+  border:1px solid var(--viewer-border)!important;font-weight:650;
+}
+.image-viewer .viewer-palette button{
+  width:28px;height:28px;border-radius:50%;border:2px solid var(--viewer-border)!important;
+  box-shadow:0 0 0 2px var(--viewer-surface)!important;
+}
+.image-viewer .viewer-bottom{
+  color:var(--viewer-muted)!important;gap:10px;padding-top:4px;
+}
+.image-viewer .viewer-bottom>*{color:inherit}
+.image-viewer .image-menu{
+  background:var(--viewer-surface)!important;color:var(--viewer-fg)!important;
+  border:1px solid var(--viewer-border)!important;border-radius:18px!important;
+  box-shadow:0 12px 30px rgba(0,0,0,.24)!important;
+}
+.image-viewer .image-menu button{
+  color:var(--viewer-fg)!important;background:transparent!important;
+  min-height:44px;border-radius:10px!important;
+}
+.image-viewer .image-menu button span{
+  color:var(--viewer-fg)!important;background:var(--viewer-surface-2)!important;
+  box-shadow:none!important;border-radius:10px!important;
+}
+.image-viewer .image-menu .menu-note{color:var(--viewer-muted)!important}
+.image-viewer .image-menu .menu-sep{border-color:var(--viewer-border)!important}
+.image-viewer button:focus-visible{outline:2px solid var(--viewer-accent)!important;outline-offset:2px}
+@media(max-width:380px){
+ .image-viewer{padding-left:10px!important;padding-right:10px!important}
+ .image-viewer .viewer-top{gap:5px}
+ .image-viewer .viewer-btn{width:38px;height:38px;min-width:38px;border-radius:12px!important}
+ .image-viewer #viewerRotateTop{width:42px;height:42px;min-width:42px}
+ .image-viewer .viewer-caption b{font-size:12px}
+ .image-viewer .viewer-toolbar{gap:6px}
+ .image-viewer .viewer-tool{padding:9px 10px}
+}
+@media(prefers-reduced-motion:reduce){.image-viewer,.image-viewer *{transition:none!important;animation:none!important}}
+
 </style>
 </head>
 <body>
