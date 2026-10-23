@@ -663,6 +663,149 @@ body:has(.app.player-view:not([style*="display: none"])) .app,
 }
 @media(prefers-reduced-motion:reduce){.image-viewer,.image-viewer *{transition:none!important;animation:none!important}}
 
+
+/* Aurore Unified Reader UI — shared tokens, shared controls, simpler surfaces */
+.image-viewer,.app.player-view{
+ --aurora-reader-bg:#171a22;
+ --aurora-reader-surface:#222834;
+ --aurora-reader-raised:#2a3240;
+ --aurora-reader-text:#f1f4f8;
+ --aurora-reader-muted:#b6c0ce;
+ --aurora-reader-border:#3a4555;
+ --aurora-reader-accent:var(--site-accent,#6d8eae);
+}
+.image-viewer{
+ background:var(--aurora-reader-bg)!important;color:var(--aurora-reader-text)!important;
+ padding:calc(8px + env(safe-area-inset-top)) 12px calc(8px + env(safe-area-inset-bottom))!important;
+ gap:8px!important;
+}
+.image-viewer.viewer-light{
+ --aurora-reader-bg:#f1f3f7;
+ --aurora-reader-surface:#ffffff;
+ --aurora-reader-raised:#e8edf4;
+ --aurora-reader-text:#202938;
+ --aurora-reader-muted:#596779;
+ --aurora-reader-border:#d5dde8;
+ background:var(--aurora-reader-bg)!important;color:var(--aurora-reader-text)!important;
+}
+.image-viewer .viewer-top{
+ min-height:48px!important;padding:0 0 8px!important;gap:7px!important;
+ border-bottom:1px solid var(--aurora-reader-border);
+}
+.image-viewer .viewer-caption{text-align:left!important;padding-left:3px!important}
+.image-viewer .viewer-caption b{color:var(--aurora-reader-text)!important;font-size:14px!important;font-weight:700!important}
+.image-viewer .viewer-caption span{color:var(--aurora-reader-muted)!important}
+.image-viewer .viewer-btn,.app.player-view .ib,.app.player-view .pill{
+ background:var(--aurora-reader-surface)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;box-shadow:none!important;
+ border-radius:13px!important;backdrop-filter:none!important;
+}
+.image-viewer .viewer-btn{width:40px;height:40px;min-width:40px}
+.image-viewer #viewerRotateTop{
+ background:var(--aurora-reader-accent)!important;color:#fff!important;
+ border-color:transparent!important;box-shadow:none!important;
+}
+.image-viewer .viewer-toolbar{
+ display:flex!important;gap:6px!important;padding:0 0 4px!important;
+}
+.image-viewer .viewer-tool{
+ background:var(--aurora-reader-surface)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;border-radius:12px!important;
+ box-shadow:none!important;min-height:40px;padding:9px 11px!important;font-weight:650!important;
+}
+.image-viewer .viewer-stage{
+ margin:0!important;padding:4px!important;min-height:100px!important;
+ background:var(--aurora-reader-bg)!important;border:0!important;border-radius:16px!important;
+ box-shadow:none!important;
+}
+.image-viewer .viewer-stage img{border-radius:8px!important;box-shadow:none!important}
+.image-viewer.viewer-light .viewer-stage{background:#e5eaf1!important}
+.image-viewer .viewer-nav{
+ background:var(--aurora-reader-surface)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;box-shadow:none!important;
+}
+.image-viewer .viewer-bottom{padding-top:0!important;color:var(--aurora-reader-muted)!important}
+.image-viewer .viewer-bottom span{color:var(--aurora-reader-muted)!important}
+.image-viewer .viewer-edit-panel,.image-viewer .viewer-palette{
+ background:var(--aurora-reader-surface)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;border-radius:14px!important;
+ box-shadow:none!important;
+}
+.image-viewer .viewer-edit-panel label,.image-viewer .viewer-edit-panel p,
+.image-viewer .viewer-palette span{color:var(--aurora-reader-muted)!important;opacity:1!important}
+.image-viewer .edit-panel-title b{color:var(--aurora-reader-text)!important}
+.image-viewer .edit-presets button{
+ background:var(--aurora-reader-raised)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;border-radius:10px!important;
+}
+.image-viewer .image-menu{
+ background:var(--aurora-reader-surface)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;border-radius:16px!important;
+ box-shadow:0 8px 24px #0003!important;
+}
+.image-viewer .image-menu button{color:var(--aurora-reader-text)!important;background:transparent!important}
+.image-viewer .image-menu button span{background:var(--aurora-reader-raised)!important;color:var(--aurora-reader-text)!important;box-shadow:none!important}
+.image-viewer .image-menu .menu-note{color:var(--aurora-reader-muted)!important}
+.image-viewer .image-info-card{
+ background:var(--aurora-reader-surface)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;border-radius:18px!important;box-shadow:none!important;
+}
+.image-viewer .image-info-card h3,.image-viewer .image-info-card dd{color:var(--aurora-reader-text)!important}
+.image-viewer .image-info-card dt{color:var(--aurora-reader-muted)!important}
+.image-info .image-info-card button{
+ background:var(--aurora-reader-accent,#6d8eae)!important;color:#fff!important;border:0!important;box-shadow:none!important;
+}
+/* The audio/video reader shares the same calm surfaces and control language. */
+.app.player-view{
+ color:var(--aurora-reader-text)!important;
+}
+.app.player-view .brand{color:var(--aurora-reader-text)!important}
+.app.player-view .logo{background:var(--aurora-reader-accent)!important;box-shadow:none!important}
+.app.player-view .stage{
+ background:var(--aurora-reader-surface)!important;border:1px solid var(--aurora-reader-border)!important;
+ border-radius:20px!important;box-shadow:none!important;
+}
+.app.player-view .meta h1{color:var(--aurora-reader-text)!important}
+.app.player-view .meta p,.app.player-view .seek,.app.player-view .list li small,
+.app.player-view .list li span,.app.player-view .empty{color:var(--aurora-reader-muted)!important}
+.app.player-view .ib{border-radius:13px!important}
+.app.player-view .ib.big{
+ background:var(--aurora-reader-accent)!important;color:#fff!important;border-color:transparent!important;
+ box-shadow:none!important;
+}
+.app.player-view .pill.on,.app.player-view .pill[aria-pressed="true"]{
+ background:var(--aurora-reader-accent)!important;color:#fff!important;border-color:transparent!important;
+}
+.app.player-view .panel,.app.player-view .list li,.app.player-view .search{
+ background:var(--aurora-reader-surface)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;border-radius:14px!important;box-shadow:none!important;
+}
+.app.player-view .panel p,.app.player-view .panel span,.app.player-view .panel label{color:var(--aurora-reader-muted)!important}
+.app.player-view .panel button,.app.player-view .list .x{
+ background:var(--aurora-reader-raised)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;box-shadow:none!important;
+}
+.app.player-view .list li.cur{
+ background:color-mix(in srgb,var(--aurora-reader-accent) 16%,var(--aurora-reader-surface))!important;
+ border-color:var(--aurora-reader-accent)!important;
+}
+.app.player-view input[type=range]{accent-color:var(--aurora-reader-accent)}
+.image-viewer button:focus-visible,.app.player-view button:focus-visible{
+ outline:2px solid var(--aurora-reader-accent)!important;outline-offset:2px;
+}
+@media(max-width:380px){
+ .image-viewer{padding-left:9px!important;padding-right:9px!important}
+ .image-viewer .viewer-top{gap:5px!important}
+ .image-viewer .viewer-btn{width:36px;height:36px;min-width:36px}
+ .image-viewer #viewerRotateTop{width:40px;height:40px;min-width:40px}
+ .image-viewer .viewer-toolbar{gap:5px!important}
+ .image-viewer .viewer-tool{padding:8px 9px!important;font-size:11px!important}
+ .app.player-view .stage{border-radius:16px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .image-viewer,.image-viewer *,.app.player-view,.app.player-view *{animation:none!important;transition:none!important}
+}
+
 </style>
 </head>
 <body>
