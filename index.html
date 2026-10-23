@@ -851,6 +851,69 @@ body:has(.app.player-view:not([style*="display: none"])) .app,
  .image-viewer .viewer-secondary-actions .viewer-tool{padding:5px 7px!important}
 }
 
+
+/* Aurore image reader: composition matching the approved simple mockup */
+.image-viewer{
+ justify-content:flex-start!important;gap:0!important;
+ padding:calc(8px + env(safe-area-inset-top)) 14px calc(10px + env(safe-area-inset-bottom))!important;
+}
+.image-viewer .viewer-top{
+ flex:0 0 auto!important;justify-content:flex-start!important;
+ min-height:52px!important;padding:0 0 10px!important;gap:8px!important;
+}
+.image-viewer .viewer-caption{text-align:left!important}
+.image-viewer #viewerShareTop{display:none!important}
+.image-viewer #viewerRotateTop{
+ order:3!important;border-radius:13px!important;width:42px;height:42px;
+ background:var(--aurora-reader-accent,var(--viewer-accent))!important;color:white!important;
+}
+.image-viewer .viewer-tools{margin-left:0!important}
+.image-viewer .viewer-stage{
+ order:2;flex:1 1 auto!important;min-height:0!important;width:100%;
+ margin:4px 0 12px!important;padding:0!important;display:grid!important;place-items:center!important;
+ background:transparent!important;border:0!important;border-radius:0!important;overflow:hidden!important;
+}
+.image-viewer .viewer-stage img{
+ max-width:100%!important;max-height:100%!important;width:auto!important;height:auto!important;
+ object-fit:contain!important;border-radius:10px!important;box-shadow:none!important;
+}
+.image-viewer .viewer-nav{width:38px!important;height:44px!important;border-radius:12px!important}
+.image-viewer .viewer-primary-actions{
+ order:3;flex:0 0 auto!important;display:grid!important;
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;
+ width:100%;padding:10px 0 4px!important;border-top:1px solid var(--aurora-reader-border);
+}
+.image-viewer .viewer-primary-actions .viewer-tool{
+ min-width:0!important;min-height:46px!important;padding:8px 3px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex-direction:column!important;gap:3px!important;white-space:normal!important;
+ border-radius:13px!important;font-size:11px!important;
+ background:var(--aurora-reader-surface)!important;color:var(--aurora-reader-text)!important;
+ border:1px solid var(--aurora-reader-border)!important;box-shadow:none!important;
+}
+.image-viewer .viewer-primary-actions .viewer-tool span{font-size:18px!important;line-height:1.1}
+.image-viewer .viewer-secondary-actions{
+ order:4;flex:0 0 auto!important;justify-content:center!important;
+ padding:2px 0 4px!important;gap:8px!important;
+}
+.image-viewer .viewer-secondary-actions .viewer-tool{
+ min-height:30px!important;padding:5px 9px!important;font-size:10px!important;
+ background:transparent!important;border-color:transparent!important;
+ color:var(--aurora-reader-muted)!important;
+}
+.image-viewer .viewer-edit-panel,.image-viewer .viewer-palette{order:5;flex:0 0 auto!important;max-height:24vh!important}
+.image-viewer .viewer-bottom{
+ order:6;flex:0 0 auto!important;min-height:28px!important;padding-top:0!important;
+}
+.image-viewer .viewer-bottom>span{font-size:10px!important;color:var(--aurora-reader-muted)!important}
+.image-viewer .viewer-bottom #viewerLast{width:32px!important;height:32px!important;min-width:32px!important}
+@media(max-width:380px){
+ .image-viewer{padding-left:10px!important;padding-right:10px!important}
+ .image-viewer .viewer-top{gap:5px!important}
+ .image-viewer .viewer-primary-actions{gap:5px!important}
+ .image-viewer .viewer-primary-actions .viewer-tool{font-size:10px!important}
+}
+
 </style>
 </head>
 <body>
@@ -886,10 +949,11 @@ body:has(.app.player-view:not([style*="display: none"])) .app,
 </section>
 <section class="image-viewer" id="imageViewer" aria-label="Visionneuse d’images">
  <div class="viewer-top"><button class="viewer-btn" id="viewerClose" aria-label="Fermer">×</button><div class="viewer-caption"><b id="viewerName">Image</b><span id="viewerCount">1 / 1</span></div><button class="viewer-btn" id="viewerShareTop" aria-label="Partager l’image" title="Partager">↗</button><button class="viewer-btn" id="viewerRotateTop" aria-label="Pivoter l’image" title="Pivoter">↻</button><div class="viewer-tools"><button class="viewer-btn viewer-more" id="viewerMore" aria-label="Plus d’options">⋮</button><div class="image-menu" id="imageMenu"><button data-image-action="share"><span>↗</span>Partager</button><button data-image-action="rotate"><span>↻</span>Retourner / pivoter</button><button data-image-action="favorite"><span></span>Ajouter aux favoris</button><div class="menu-sep"></div><button data-image-action="copy"><span>▣</span>Copier dans un dossier…</button><button data-image-action="move"><span>⇢</span>Déplacer vers un dossier…</button><button data-image-action="use"><span>▧</span>Utiliser comme…</button><button data-image-action="trash"><span>⌫</span>Placer dans la corbeille / retirer</button><button data-image-action="private"><span></span>Mettre en privé</button><div class="menu-sep"></div><button data-image-action="info"><span>ⓘ</span>Informations</button><button data-image-action="print"><span>⎙</span>Imprimer</button><div class="menu-note">Les actions sur les fichiers originaux dépendent des autorisations Android et du navigateur.</div></div></div></div>
+ <div class="viewer-stage" id="viewerStage"><button class="viewer-nav viewer-prev" id="viewerPrev" aria-label="Image précédente">‹</button><img id="viewerImage" alt=""><button class="viewer-nav viewer-next" id="viewerNext" aria-label="Image suivante">›</button></div>
  <div class="viewer-toolbar viewer-primary-actions" aria-label="Actions principales"><button class="viewer-tool" id="viewerZoom" type="button"><span aria-hidden="true">⌕</span> Zoom</button><button class="viewer-tool" id="viewerEditToggle" type="button"><span aria-hidden="true">✎</span> Modifier</button><button class="viewer-tool" id="viewerFavoriteAction" type="button"><span aria-hidden="true">☆</span> Favori</button><button class="viewer-tool" id="viewerShareAction" type="button"><span aria-hidden="true">↗</span> Partager</button></div><div class="viewer-secondary-actions" aria-label="Préférences de la visionneuse"><button class="viewer-tool" id="viewerTheme" type="button">☼ Mode clair</button><button class="viewer-tool" id="viewerPaletteToggle" type="button">◉ Couleur</button></div>
  <div class="viewer-edit-panel" id="viewerEditPanel" hidden><div class="edit-panel-title"><b>Réglages de l’image</b><button class="viewer-tool" id="viewerEditReset" type="button">Réinitialiser</button></div><label>Luminosité <input id="editBrightness" type="range" min="50" max="150" value="100"></label><label>Contraste <input id="editContrast" type="range" min="50" max="180" value="100"></label><label>Saturation <input id="editSaturation" type="range" min="0" max="200" value="100"></label><label>Teinte <input id="editHue" type="range" min="0" max="360" value="0"></label><div class="edit-presets"><button data-image-preset="none">Original</button><button data-image-preset="grayscale">Noir et blanc</button><button data-image-preset="sepia">Sépia</button></div><p>Ces réglages modifient l’aperçu. L’export du fichier modifié pourra être ajouté ensuite.</p></div>
  <div class="viewer-palette" id="viewerPalette" hidden aria-label="Palette de couleurs"><span>Couleur des commandes</span><button data-viewer-color="#5d8ee8" style="--swatch:#5d8ee8" aria-label="Bleu"></button><button data-viewer-color="#27b99a" style="--swatch:#27b99a" aria-label="Vert"></button><button data-viewer-color="#a779ed" style="--swatch:#a779ed" aria-label="Violet"></button><button data-viewer-color="#ed8d56" style="--swatch:#ed8d56" aria-label="Orange"></button><button data-viewer-color="#e45d80" style="--swatch:#e45d80" aria-label="Rose"></button><button data-viewer-color="#e0b83e" style="--swatch:#e0b83e" aria-label="Jaune"></button><span style="flex-basis:100%;margin-top:5px">Teinte de l’image</span><button data-image-tint="0" style="--swatch:#d5d5d5" aria-label="Original"></button><button data-image-tint="195" style="--swatch:#5d8ee8" aria-label="Bleuté"></button><button data-image-tint="115" style="--swatch:#27b99a" aria-label="Verdâtre"></button><button data-image-tint="265" style="--swatch:#a779ed" aria-label="Violet"></button><button data-image-tint="25" style="--swatch:#ed8d56" aria-label="Chaud"></button><button data-image-tint="335" style="--swatch:#e45d80" aria-label="Rosé"></button><button data-image-tint="45" style="--swatch:#e0b83e" aria-label="Doré"></button></div>
- <div class="viewer-stage" id="viewerStage"><button class="viewer-nav viewer-prev" id="viewerPrev" aria-label="Image précédente">‹</button><img id="viewerImage" alt=""><button class="viewer-nav viewer-next" id="viewerNext" aria-label="Image suivante">›</button></div>
+ 
  <div class="viewer-bottom"><span style="font-size:11px;color:#a9adba">Glisse ou utilise les flèches pour naviguer</span><button class="viewer-btn" id="viewerLast" aria-label="Image suivante">→</button></div>
 </section>
 <div class="image-info" id="imageInfo"><div class="image-info-card"><h3>Informations de l’image</h3><dl id="imageInfoDetails"></dl><button id="imageInfoClose">Fermer</button></div></div><img id="printImage" alt="" style="display:none">
